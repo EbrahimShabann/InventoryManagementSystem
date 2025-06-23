@@ -35,6 +35,12 @@ namespace InventoryManagementSystem.Models
 
         [Required]
         public DateTime TransactionDate { get; set; }
+
+        [Required]
+        public int WareHouseId { get; set; }
+
+        [ForeignKey("WareHouseId")]
+        public virtual WareHouse WareHouse { get; set; }
     }
 
     public enum TransactionType
