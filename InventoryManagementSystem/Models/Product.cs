@@ -44,14 +44,14 @@ namespace InventoryManagementSystem.Models
         [Range(0, double.MaxValue, ErrorMessage = " Total Count can't be less than 0")]
         public int TotalStocQuantity { get; set; }
 
-        [Required]
-        public int CategoryId { get; set; }
+        
+        public int? CategoryId { get; set; }
         [ForeignKey("CategoryId")]
         public virtual Category Category { get; set; }
 
 
-        [Required]
-        public int SupplierId { get; set; }
+        
+        public int? SupplierId { get; set; }
         [ForeignKey("SupplierId")]
         public virtual Supplier Supplier { get; set; }
 
