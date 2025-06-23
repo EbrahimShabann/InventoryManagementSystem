@@ -26,10 +26,10 @@ namespace InventoryManagementSystem.Models
         public string Description { get; set; }
 
 
-        [Required]
-        [Remote("CheckSKUunique", "AttributesConstraints")]
-        [MaxLength(50, ErrorMessage = "SKU Max Length is 200 Chars")]
-        public string SKU { get; set; }
+        //[Required]
+        //[Remote("CheckSKUunique", "AttributesConstraints")]
+        //[MaxLength(50, ErrorMessage = "SKU Max Length is 200 Chars")]
+        //public string SKU { get; set; }
 
 
         [Required]
@@ -41,6 +41,8 @@ namespace InventoryManagementSystem.Models
         [Range(0, double.MaxValue, ErrorMessage = " Reorder Level can't be less than 0")]
         public int ReorderLevel { get; set; }
 
+        [Range(0, double.MaxValue, ErrorMessage = " Total Count can't be less than 0")]
+        public int TotalStocQuantity { get; set; }
 
         [Required]
         public int CategoryId { get; set; }
@@ -54,11 +56,11 @@ namespace InventoryManagementSystem.Models
         public virtual Supplier Supplier { get; set; }
 
 
-        [Required]
-        [Range(0, double.MaxValue, ErrorMessage = "Current Stock Quantity can't be less than 0")]
-        public int CurrentStockQuantity { get; set; }
-
+       
 
         public virtual List<Transaction> Transactions { get; set; }
+
+        public virtual List<InventoryItem> InventoryItems { get; set; }
+
     }
 }
