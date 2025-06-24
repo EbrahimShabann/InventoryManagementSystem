@@ -38,7 +38,9 @@ namespace InventoryManagementSystem.Services.Data
                     Email = "AdminUser2530@gmail.com",
                     PhoneNumber = "01555178340",
                     Address = "Shawa Mansoura Egypt",
-                    Image = "m.png"
+                    Image = "m.png",
+                    EmailConfirmed = true     //important when you seed data in db during creation for first time to make the user confirmed
+                                              //without it the signInManager.PasswordSignInAsync returns is not allowed
                 };
 
                 var result = await _userManager.CreateAsync(admin, "Admin2530@");

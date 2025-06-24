@@ -1,5 +1,6 @@
 using InventoryManagementSystem.Models;
 using InventoryManagementSystem.Repositories;
+using InventoryManagementSystem.Repositories.IRepositories;
 using InventoryManagementSystem.Services.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -27,6 +28,7 @@ namespace InventoryManagementSystem
 
 
             builder.Services.AddDbContext<AppDbContext>();
+            builder.Services.AddScoped<IWareHouseRepository, WareHouseRepository>();
 
 
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
