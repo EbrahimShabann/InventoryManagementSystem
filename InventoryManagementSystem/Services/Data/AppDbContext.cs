@@ -11,6 +11,8 @@ namespace InventoryManagementSystem.Services.Data
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<WareHouse> WareHouses { get; set; }
+        public DbSet<InventoryItem> InventoryItems { get; set; }
 
         public AppDbContext(DbContextOptions options):base(options)
         {

@@ -1,0 +1,153 @@
+﻿@model PagedResult<WareHouse>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+
+
+
+@* upsert modal *@
+<partial name="_UpSertModalPartial" />
+
+
+@section asideNav {
+  
+    <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link UpSert-btn" href="#" data-id="0">
+
+                    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-key-25 text-dark text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Add WareHouse</span>
+                </a>
+            </li>
+           
+            
+
+        </ul>
+    </div>
+   
+    }
+
+@* warehouses table *@
+<div class="row">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header pb-0">
+                <h5>WareHouses</h5>
+            </div>
+            <div class="card-body px-0 pt-0 pb-2">
+                <div class="table-responsive p-0">
+                    <table class="table align-items-center mb-0">
+                        <thead>
+                            <tr>
+                                <th>
+                                    WareHouse Id
+                                </th>
+                                <th>
+                                    WareHouse Name
+                                </th>
+                                <th>
+                                    Location
+                                </th>
+                                <th>
+                                    PhoneNumber
+                                </th>
+                                <th>
+                                    IsActive
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.TotalItems)
+                            {
+                                <tr>
+                                   
+                                    <td>
+                                        <p class="text-xs text-center font-weight-bold mb-0"> @item.WareHouseId</p>
+                                    </td>
+                                    <td class="align-middle text-center text-sm">
+                                        <span class="text-secondary text-xs font-weight-bold">@item.Name</span>
+                                    </td>
+                                   <td class="align-middle text-center text-sm">
+                                        <span class="text-secondary text-xs font-weight-bold">@item.Location</span>
+                                    </td>
+                                   <td class="align-middle text-center text-sm">
+                                        <span class="text-secondary text-xs font-weight-bold">@item.PhoneNumber</span>
+                                    </td>
+                                   <td class="align-middle text-center text-sm">
+                                        @if (item.IsActive == true)
+                                        {
+                                            <span class="badge badge-sm " style="background-color:green">@item.IsActive</span>
+
+                                        }
+                                        else
+                                        {
+                                             <span class="badge badge-sm " style="background-color:red">@item.IsActive</span>
+
+                                        }
+                                    </td>
+                                  
+                                    <td class="align-middle btn btn-dark ms-1">
+                                        <a class="UpSert-btn text-secondary font-weight-bold text-xs page-link" data-id="@item.WareHouseId">Edit</a>
+                                    </td>
+                                    <td class="align-middle btn btn-danger">
+                                        <button class="delete-btn text-secondary font-weight-bold text-xs page-link" data-id="@item.WareHouseId">Delete</button>
+                                    </td>
+                                
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/lib/jquery/dist/jquery.min.js"></script>
+
+<script>
+    window.addEventListener('load', () => {
+
+        //delete confirmation
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                  
+                const CourseId= btn.getAttribute("data-id");
+                if (confirm('Delete confirmation?')) {
+                    window.location.href = `/Course/Delete/${CourseId}`;
+                }
+            });
+        });
+       
+    });//end of load
+
+    //ajax
+
+    //UpSert course
+    $(".UpSert-btn").click(function(){
+        const id = $(this).data('id');
+        $("#modalBody").load(`/Course/UpSert/${id}`,function(){
+          new bootstrap.Modal('#upsertModal').show();
+        })
+    })
+
+    //add trainee result form
+    $("#trResult-Btn").click(function(){
+       
+        $("#modalBody").load(`/Course/AddTraineeResult`,function(){
+          new bootstrap.Modal('#upsertModal').show();
+        })
+    })
+</script>
+
+<partial name="_PaginationControls" />
+
+
+
