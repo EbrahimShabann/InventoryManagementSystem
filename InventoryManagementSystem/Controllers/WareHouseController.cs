@@ -1,4 +1,5 @@
-﻿using InventoryManagementSystem.Repositories.IRepositories;
+﻿using InventoryManagementSystem.Models;
+using InventoryManagementSystem.Repositories.IRepositories;
 using InventoryManagementSystem.Services.Data;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,16 +7,18 @@ namespace InventoryManagementSystem.Controllers
 {
     public class WareHouseController : Controller
     {
-        private readonly IWareHouseRepository wareHouseRepository;
 
-        public WareHouseController(IWareHouseRepository wareHouseRepository)
+        public WareHouseController(IRepository<WareHouse> whRepo)
         {
-            this.wareHouseRepository = wareHouseRepository;
+            WhRepo = whRepo;
         }
-        public IActionResult Index(int pageNumber=1, int pageSize=10)
+
+        public IRepository<WareHouse> WhRepo { get; }
+
+        public IActionResult Index(int page=1, int size=10)
         {
-            var wareHouses = wareHouseRepository.GetAll().AsEnumerable();
-            var pagedResult = wareHouses.ToPagedResult(pageNumber, pageSize);
+            var wareHouses = WhRepo.GetAll().AsEnumerable();
+            var pagedResult = wareHouses.ToPagedResult(page, size);
             return View(pagedResult);
         }
     }
