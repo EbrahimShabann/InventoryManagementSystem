@@ -45,19 +45,22 @@
                     <table class="table align-items-center mb-0">
                         <thead>
                             <tr>
-                                <th>
-                                    WareHouse Id
+                                <th class="text-center">
+                                   <a asp-action="Index" asp-route-sortOrder="@ViewData["IdSortParam"]"> 
+                                       @* WareHouse Id @(Model.SortOrder == "name_desc" ? "↓" : Model.SortOrder == "" ? "↑" : "") *@
+
+                                       </a>
                                 </th>
-                                <th>
-                                    WareHouse Name
+                                <th class="text-center">
+                                 <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParam"]">WareHouse Name</a>
                                 </th>
-                                <th>
-                                    Location
+                                <th class="text-center">
+                                    <a asp-action="Index" asp-route-sortOrder="@ViewData["locationSortParam"]">Location</a>
+                                </th >
+                                <th class="text-center">
+                                   <a asp-action="Index" asp-route-sortOrder="@ViewData["phoneSortParam"]"> PhoneNumber</a>
                                 </th>
-                                <th>
-                                    PhoneNumber
-                                </th>
-                                <th>
+                                <th class="text-center">
                                     IsActive
                                 </th>
                                 <th></th>
@@ -93,6 +96,10 @@
                                         }
                                     </td>
                                   
+                                    <td class="align-middle btn btn-primary ms-1">
+                                        <a href="/WareHouse/Details?WareHouseId=@item.WareHouseId" class=" text-secondary font-weight-bold text-xs page-link" >Details</a>
+                                    </td>
+                                  
                                     <td class="align-middle btn btn-dark ms-1">
                                         <a class="UpSert-btn text-secondary font-weight-bold text-xs page-link" data-id="@item.WareHouseId">Edit</a>
                                     </td>
@@ -119,9 +126,9 @@
         document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                   
-                const CourseId= btn.getAttribute("data-id");
+                const Id= btn.getAttribute("data-id");
                 if (confirm('Delete confirmation?')) {
-                    window.location.href = `/Course/Delete/${CourseId}`;
+                    window.location.href = `/WareHouse/Delete/${Id}`;
                 }
             });
         });
@@ -133,18 +140,12 @@
     //UpSert course
     $(".UpSert-btn").click(function(){
         const id = $(this).data('id');
-        $("#modalBody").load(`/Course/UpSert/${id}`,function(){
+        $("#modalBody").load(`/WareHouse/UpSert/${id}`,function(){
           new bootstrap.Modal('#upsertModal').show();
         })
     })
 
-    //add trainee result form
-    $("#trResult-Btn").click(function(){
-       
-        $("#modalBody").load(`/Course/AddTraineeResult`,function(){
-          new bootstrap.Modal('#upsertModal').show();
-        })
-    })
+   
 </script>
 
 <partial name="_PaginationControls" />
