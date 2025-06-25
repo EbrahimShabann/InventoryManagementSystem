@@ -1,0 +1,54 @@
+﻿@model WareHouse
+
+
+<div class="card shadow ">
+    <div class="card-header text-white bg-dark d-flex justify-content-between">
+        <h2 class="text-white ">@(Model.WareHouseId != 0 ? "Edit " : "Add ") WareHouse </h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fa-solid fa-xmark bg-dark text-light"></i>
+        </button>
+
+    </div>
+    <div class="card-body ">
+        <form id="upsertForm"
+              asp-controller="WareHouse"
+              asp-action="UpSert"
+              data-ajax="true"
+              data-ajax-method="post"
+              data-ajax-mode="replace"
+              data-ajax-update="#modalBody">
+
+            <input asp-for=@Model.WareHouseId hidden/>
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+           
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Location" class="control-label"></label>
+                <input asp-for="Location" class="form-control" />
+                <span asp-validation-for="Location" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
+                </label>
+            </div>
+            <div class="d-flex justify-content-between mt-3">
+                <button type="submit" class=" btn btn-success  form form-control">Save</button>
+                <button type="button" class="btn btn-secondary form form-control" data-bs-dismiss="modal">Close</button>
+
+            </div>
+      </form>
+    </div>
+</div>
+
+<partial name="_ValidationScriptsPartial"/>

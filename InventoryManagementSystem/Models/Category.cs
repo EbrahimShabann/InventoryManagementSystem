@@ -10,7 +10,7 @@ namespace InventoryManagementSystem.Models
        
         public int CategoryId { get; set; }
         [Required]
-        [Remote("CheckUniqueness", "AttributesConstraints")]
+        [Remote("CheckCatNameUniq", "AttributesConstraints",AdditionalFields = "CategoryId")]
         [MaxLength(100,ErrorMessage = "Category Name Max Length is 100 Chars")]
          public string Name { get; set; }
 

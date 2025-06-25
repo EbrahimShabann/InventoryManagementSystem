@@ -156,7 +156,7 @@ namespace InventoryManagementSystem.Migrations
 
                     b.HasIndex("WareHouseId");
 
-                    b.ToTable("InventoryItem");
+                    b.ToTable("InventoryItems");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.Models.Product", b =>
@@ -309,8 +309,7 @@ namespace InventoryManagementSystem.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("WareHouseId");
 

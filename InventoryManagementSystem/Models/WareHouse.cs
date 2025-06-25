@@ -11,18 +11,19 @@ namespace InventoryManagementSystem.Models
 
 
         [Required]
-        [Remote("CheckUniqueness", "AttributesConstraints")]
+        [Remote("CheckWHNameUniq", "AttributesConstraints",AdditionalFields = "WareHouseId")]
         [MaxLength(100,ErrorMessage ="Name length can't be more than 100 chars")]
         public string Name { get; set; }
 
 
         [Required]
+        [MinLength(20,ErrorMessage = "Location length can't be less than 20 chars")]
         [MaxLength(255, ErrorMessage = "Location length can't be more than 255 chars")]
         public string Location { get; set; }
 
 
-        [DataType(DataType.PhoneNumber)]
-        [MaxLength(100, ErrorMessage = "Phone Number length can't be more than 20  number")]
+        [RegularExpression("^(?:\\+20|0020|0)?1[0125]\\d{8}$"
+            ,ErrorMessage = "Phone Number Must be one of these formats +20xxxxxxxxxx or  0020xxxxxxxxxx or 0xxxxxxxxxx")]
         public string PhoneNumber { get; set; }
 
 
