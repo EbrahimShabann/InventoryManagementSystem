@@ -1,0 +1,170 @@
+﻿@model PagedResult<ApplicationUser>
+
+@{
+    ViewData["Title"] = "Users";
+}
+
+
+<partial name="_UpSertModalPartial" />
+
+@section asideNav {
+
+    <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link UpSert-btn" href="#" data-id="">
+
+                    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-key-25 text-dark text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Add User</span>
+                </a>
+            </li>
+
+
+
+        </ul>
+    </div>
+
+}
+
+@* Users table *@
+<div class="row">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header pb-0">
+                <h5>Users Table</h5>
+            </div>
+            <div class="card-body px-0 pt-0 pb-2">
+                <div id="injectTable" class="table-responsive p-0">
+                   
+                <table class="table align-items-center mb-0">
+                        <thead>
+                            <tr>
+                              
+                                <th class="text-center">
+                                    Name
+                                </th>
+                                <th class="text-center">
+                                    Email
+                                </th>
+                                <th class="text-center">
+                                    Phone
+                                </th>
+                                <th class="text-center">
+                                    Address
+                                </th>
+
+                                <th class="text-center">
+                                    Role
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            @foreach (var item in Model.Items)
+                            {
+                                  <tr>
+                                   
+                                  
+                                    <td class="align-middle text-center text-sm">
+                                        <span class="text-secondary text-xs font-weight-bold">@item.UserName</span>
+                                    </td>
+                                   <td class="align-middle text-center text-sm">
+                                        <span class="text-secondary text-xs font-weight-bold">@item.Email</span>
+                                    </td>
+                                   <td class="align-middle text-center text-sm">
+                                        <span class="text-secondary text-xs font-weight-bold">@item.PhoneNumber</span>
+                                    </td>
+                                   <td class="align-middle text-center text-sm">
+                                        <span class="text-secondary text-xs font-weight-bold">@item.Address</span>
+                                    </td>
+                                   <td class="align-middle text-center text-sm">
+                                        <span class="text-secondary text-xs font-weight-bold">@item.Role</span>
+                                    </td>
+                                  
+                                    <td class="align-middle btn btn-primary ms-1">
+                                        <a href="/User/Details?Id=@item.Id" class=" text-secondary font-weight-bold text-xs page-link" >Details</a>
+                                    </td>
+                                  
+                                    <td class="align-middle btn btn-dark ms-1">
+                                        <a class="UpSert-btn text-secondary font-weight-bold text-xs page-link" data-id="@item.Id">Edit</a>
+                                    </td>
+                                    <td class="align-middle btn btn-danger">
+                                        <button class="delete-btn text-secondary font-weight-bold text-xs page-link" data-id="@item.Id">Delete</button>
+                                    </td>
+                                
+                                </tr>
+                                
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<script src="/lib/jquery/dist/jquery.min.js"></script>
+
+<script>
+    window.addEventListener('load', () => {
+
+        //delete confirmation
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                  
+                const Id= btn.getAttribute("data-id");
+                if (confirm('Delete confirmation?')) {
+                    window.location.href = `/User/Delete/${Id}`;
+                }
+            });
+        });
+       
+    });//end of load
+
+    //ajax
+
+    //UpSert warehouse
+    $(".UpSert-btn").click(function(){
+        const id = $(this).data('id')
+        $("#modalBody").load(`/User/RoleManagment?id=${id}`,function(){
+          new bootstrap.Modal('#upsertModal').show();
+        })
+    })
+
+
+    //sort warehouses
+
+         $(document).on('click', '.sort', function(e){
+        e.preventDefault();
+        // const sortOrder = $(this).data('sortorder');
+        console.log(sortOrder);
+
+        $.ajax({
+            url: `/WareHouse/sortTable?sortOrder=${sortOrder}`,
+            success: function(result){
+                $("#injectTable").html(result);
+            },
+            error: function () {
+                alert("Failed to sort.");
+            }
+        });
+    });
+
+
+   
+</script>
+
+<partial name="_PaginationControls" />
+
+
+

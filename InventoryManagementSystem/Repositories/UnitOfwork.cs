@@ -8,6 +8,7 @@ namespace InventoryManagementSystem.Repositories
     {
         private readonly AppDbContext db;
         IWareHouseRepo _wareHouseRepo;
+        IAppUserRepo userRepo;
         public UnitOfwork(AppDbContext db)
         {
             this.db = db;
@@ -18,6 +19,13 @@ namespace InventoryManagementSystem.Repositories
                 _wareHouseRepo = new WareHouseRepository(db);
                 return _wareHouseRepo ;
             } }
+        public IAppUserRepo AppUserRepo { get
+            {
+                if (userRepo != null) return userRepo;
+                userRepo = new AppUserRepo(db);
+                return userRepo ;
+            } }
+
 
         public void Save()
         {
