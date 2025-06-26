@@ -38,6 +38,8 @@ namespace InventoryManagementSystem
             builder.Services.AddScoped<IDbInitializer, DbInitializer>();
             builder.Services.AddScoped<IEmailSender,EmailSender>();
             builder.Services.AddRazorPages();
+            builder.Services.AddScoped<IproductRepo, ProdcutRepo>();
+
 
 
 
