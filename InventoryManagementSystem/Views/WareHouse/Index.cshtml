@@ -41,76 +41,8 @@
                 <h5>WareHouses</h5>
             </div>
             <div class="card-body px-0 pt-0 pb-2">
-                <div class="table-responsive p-0">
-                    <table class="table align-items-center mb-0">
-                        <thead>
-                            <tr>
-                                <th class="text-center">
-                                   <a asp-action="Index" asp-route-sortOrder="@ViewData["IdSortParam"]"> 
-                                       @* WareHouse Id @(Model.SortOrder == "name_desc" ? "↓" : Model.SortOrder == "" ? "↑" : "") *@
-
-                                       </a>
-                                </th>
-                                <th class="text-center">
-                                 <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParam"]">WareHouse Name</a>
-                                </th>
-                                <th class="text-center">
-                                    <a asp-action="Index" asp-route-sortOrder="@ViewData["locationSortParam"]">Location</a>
-                                </th >
-                                <th class="text-center">
-                                   <a asp-action="Index" asp-route-sortOrder="@ViewData["phoneSortParam"]"> PhoneNumber</a>
-                                </th>
-                                <th class="text-center">
-                                    IsActive
-                                </th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.TotalItems)
-                            {
-                                <tr>
-                                   
-                                    <td>
-                                        <p class="text-xs text-center font-weight-bold mb-0"> @item.WareHouseId</p>
-                                    </td>
-                                    <td class="align-middle text-center text-sm">
-                                        <span class="text-secondary text-xs font-weight-bold">@item.Name</span>
-                                    </td>
-                                   <td class="align-middle text-center text-sm">
-                                        <span class="text-secondary text-xs font-weight-bold">@item.Location</span>
-                                    </td>
-                                   <td class="align-middle text-center text-sm">
-                                        <span class="text-secondary text-xs font-weight-bold">@item.PhoneNumber</span>
-                                    </td>
-                                   <td class="align-middle text-center text-sm">
-                                        @if (item.IsActive == true)
-                                        {
-                                            <span class="badge badge-sm " style="background-color:green">@item.IsActive</span>
-
-                                        }
-                                        else
-                                        {
-                                             <span class="badge badge-sm " style="background-color:red">@item.IsActive</span>
-
-                                        }
-                                    </td>
-                                  
-                                    <td class="align-middle btn btn-primary ms-1">
-                                        <a href="/WareHouse/Details?WareHouseId=@item.WareHouseId" class=" text-secondary font-weight-bold text-xs page-link" >Details</a>
-                                    </td>
-                                  
-                                    <td class="align-middle btn btn-dark ms-1">
-                                        <a class="UpSert-btn text-secondary font-weight-bold text-xs page-link" data-id="@item.WareHouseId">Edit</a>
-                                    </td>
-                                    <td class="align-middle btn btn-danger">
-                                        <button class="delete-btn text-secondary font-weight-bold text-xs page-link" data-id="@item.WareHouseId">Delete</button>
-                                    </td>
-                                
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+                <div id="injectTable" class="table-responsive p-0">
+                    <partial name="sortTable"/>
                 </div>
             </div>
         </div>
@@ -137,13 +69,33 @@
 
     //ajax
 
-    //UpSert course
+    //UpSert warehouse
     $(".UpSert-btn").click(function(){
         const id = $(this).data('id');
         $("#modalBody").load(`/WareHouse/UpSert/${id}`,function(){
           new bootstrap.Modal('#upsertModal').show();
         })
     })
+
+
+    //sort warehouses
+
+         $(document).on('click', '.sort', function(e){
+        e.preventDefault();
+        const sortOrder = $(this).data('sortorder');
+        console.log(sortOrder);
+
+        $.ajax({
+            url: `/WareHouse/sortTable?sortOrder=${sortOrder}`,
+            success: function(result){
+                $("#injectTable").html(result);
+            },
+            error: function () {
+                alert("Failed to sort.");
+            }
+        });
+    });
+
 
    
 </script>
