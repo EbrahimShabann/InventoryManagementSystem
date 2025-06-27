@@ -1,0 +1,51 @@
+﻿@model List<Product>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 class="text-center my-4">All Courses</h1>
+
+<div class="container">
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="~/images/Products/@item.Image" class="card-img-top" alt="@item.Name" style="height: 220px; object-fit: cover;" />
+
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Name</h5>
+                        <p class="card-text">
+                            <strong>ID:</strong> @item.ProductId<br />
+                            <strong>Description:</strong> @item.Description<br />
+                            <strong>Price:</strong> @item.Price <br/>
+                            <strong>ReorderLevel :</strong> @item.ReorderLevel<br/>
+                            <strong>Stock:</strong> @item.TotalStocQuantity<br />
+                            <strong>CategoryId:</strong> @item.CategoryId<br />
+                            <strong>SupplierId:</strong> @item.SupplierId<br />
+
+                        </p>
+                        <a href="/Product/edit/@item.ProductId" class="btn btn-warning">Edit</a>
+                        <a href="/Product/Delete/@item.ProductId" class="btn btn-danger">Delete</a>
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+
+
+    <div class="text-center my-4">
+        <a href="/Product/new" class="btn btn-primary">New Product</a>
+    </div>
+</div>
+
+<div class="text-center my-4">
+    @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
+    {
+        <a class="btn @(i == (int)ViewBag.CurrentPage ? "btn-primary" : "btn-outline-primary") mx-1"
+           href="/Product/Index?page=@i">@i</a>
+    }
+</div>
+
