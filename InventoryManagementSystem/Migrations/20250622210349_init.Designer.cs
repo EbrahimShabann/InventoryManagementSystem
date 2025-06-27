@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementSystem.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250622155752_createDbAndTablesAndIntializeAdminUser")]
-    partial class createDbAndTablesAndIntializeAdminUser
+    [Migration("20250622210349_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

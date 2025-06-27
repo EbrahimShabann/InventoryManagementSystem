@@ -2,72 +2,56 @@
 using InventoryManagementSystem.Repositories.IRepositories;
 using InventoryManagementSystem.Services.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 
 namespace InventoryManagementSystem.Controllers
 {
-    public class WareHouseController : Controller
+    public class SupplierController : Controller
     {
         private readonly IUnitOfWork uof;
-
-        public WareHouseController(IUnitOfWork uof)
+        public SupplierController(IUnitOfWork uof)
         {
-
             this.uof = uof;
         }
-
         public IActionResult Index(string sortOrder, int page = 1, int size = 10)
         {
-
             ViewData["IdSortParam"] = String.IsNullOrEmpty(sortOrder) ? "id_desc" : "";
             ViewData["NameSortParam"] = sortOrder == "name" ? "name_desc" : "name";
-            ViewData["locationSortParam"] = sortOrder == "location" ? "loca_desc" : "loca";
-            ViewData["phoneSortParam"] = sortOrder == "phone" ? "phone_desc" : "phone";
+            ViewData["EmailSortParam"] = sortOrder == "email" ? "email_desc" : "email";
 
-            var wareHouses = uof.warehouseRepo.sort(sortOrder).AsEnumerable();
-            var pagedResult = wareHouses.ToPagedResult(page, size);
+            var suppliers = uof.supplierRepo.sort(sortOrder).AsEnumerable();
+            var pagedResult = suppliers.ToPagedResult(page, size);
             return View(pagedResult);
         }
 
-        public IActionResult Details(int WareHouseId)
-        {
-            if (WareHouseId == 0) return View("Error");
-            var ware = uof.warehouseRepo.GetById(WareHouseId);
-            return View(ware);
-        }
-
-        [HttpGet]
         public IActionResult UpSert(int? id)
         {
-            if (id == 0 || id == null) return PartialView(new WareHouse());
+            if (id == 0 || id == null) return PartialView(new Supplier());
             else
             {
-                var wareHouseFromDb = uof.warehouseRepo.GetById(id);
-                return PartialView(wareHouseFromDb);
+                var supplierFromDb = uof.supplierRepo.GetById(id);
+                return PartialView(supplierFromDb);
             }
         }
-
-
         [HttpPost]
-        public IActionResult UpSert(WareHouse ware)
+        public IActionResult UpSert(Supplier supplier)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    return PartialView(ware);
+                    return PartialView(supplier);
                 }
                 else
                 {
-                    if (ware.WareHouseId == 0)
+                    if (supplier.SupplierId == 0)
                     {
-                        // add new warehouse
-                        uof.warehouseRepo.Add(ware);
+                        // add new supplier
+                        uof.supplierRepo.Add(supplier);
                     }
                     else
                     {
-                        //update existed warehouse
-                        uof.warehouseRepo.Update(ware);
+                        //update existed supplier
+                        uof.supplierRepo.Update(supplier);
                     }
                     uof.Save();
                     return RedirectToAction("Index");
@@ -76,7 +60,7 @@ namespace InventoryManagementSystem.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("Ex", ex.Message);
-                return PartialView(ware);
+                return PartialView(supplier);
             }
         }
 
@@ -84,12 +68,17 @@ namespace InventoryManagementSystem.Controllers
         {
             if (id != 0)
             {
-                uof.warehouseRepo.Delete(id);
+                uof.supplierRepo.Delete(id);
                 uof.Save();
                 return RedirectToAction("Index");
             }
             return View("Error");
-
+        }
+        public IActionResult Details(int SupplierId)
+        {
+            if (SupplierId == 0) return View("Error");
+            var supplier = uof.supplierRepo.GetById(SupplierId);
+            return View(supplier);
         }
     }
 }
