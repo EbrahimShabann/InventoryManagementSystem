@@ -1,6 +1,7 @@
 ﻿using InventoryManagementSystem.Models;
 using InventoryManagementSystem.Repositories.IRepositories;
 using InventoryManagementSystem.Services.Data;
+using System.Runtime.Intrinsics.Arm;
 
 namespace InventoryManagementSystem.Repositories
 {
@@ -27,9 +28,9 @@ namespace InventoryManagementSystem.Repositories
            return db.ApplicationUsers.ToList();
         }
 
-        public string GetRoleByUserId (string id)
+        public string GetRoleOfUser (string userId)
         {
-            string RoleId = db.UserRoles.FirstOrDefault(u => u.UserId == id)?.RoleId;
+            string RoleId = db.UserRoles.FirstOrDefault(u => u.UserId == userId)?.RoleId;
             string userRole = db.Roles.FirstOrDefault(u => u.Id == RoleId)?.Name;
 
             return userRole;
@@ -45,15 +46,26 @@ namespace InventoryManagementSystem.Repositories
             throw new NotImplementedException();
         }
 
-        public void Update(ApplicationUser obj)
+        public void Update(ApplicationUser user)
         {
-            throw new NotImplementedException();
+            db.ApplicationUsers.Update(user);
         }
 
         public ApplicationUser GetUserById(string id)
         {
            ApplicationUser user= db.ApplicationUsers.FirstOrDefault(u => u.Id == id);
             return user;
+        }
+
+        public string GetRoleName(string roleId)
+        {
+            string roleName=db.Roles.SingleOrDefault(r => r.Id == roleId)?.Name;
+            return roleName;
+        }
+
+        public void DeleteUser(ApplicationUser user)
+        {
+            db.ApplicationUsers.Remove(user);
         }
     }
 }

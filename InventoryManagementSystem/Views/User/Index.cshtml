@@ -114,6 +114,8 @@
 
 
 <script src="/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 <script>
     window.addEventListener('load', () => {
@@ -123,11 +125,28 @@
             btn.addEventListener('click', () => {
                   
                 const Id= btn.getAttribute("data-id");
-                if (confirm('Delete confirmation?')) {
-                    window.location.href = `/User/Delete/${Id}`;
-                }
-            });
-        });
+
+                    Swal.fire({
+                      title: "Are you sure?",
+                      text: "You won't be able to revert this!",
+                      icon: "warning",
+                      showCancelButton: true,
+                      confirmButtonColor: "#3085d6",
+                      cancelButtonColor: "#d33",
+                      confirmButtonText: "Yes, delete it!"
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                           window.location.href = `/User/Delete/${Id}`;
+                        Swal.fire({
+                          title: "Deleted!",
+                          text: "User has been deleted.",
+                          icon: "success"
+                        });
+                      }
+                    });
+                 });
+               });
+           
        
     });//end of load
 
@@ -136,8 +155,14 @@
     //UpSert warehouse
     $(".UpSert-btn").click(function(){
         const id = $(this).data('id')
-        $("#modalBody").load(`/User/RoleManagment?id=${id}`,function(){
-          new bootstrap.Modal('#upsertModal').show();
+        $("#modalBody").load(`/User/UpSert?id=${id}`,function(response,status,xhr){
+            if(status=="error"){
+                alert(`Ajax Call failed in User Controller RoleManagment Endpoint with Response ${response}`);
+            }
+            else{
+                new bootstrap.Modal('#upsertModal').show();
+            }
+          
         })
     })
 
