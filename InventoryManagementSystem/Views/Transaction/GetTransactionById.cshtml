@@ -1,0 +1,303 @@
+﻿@model Transaction
+@{
+    ViewData["Title"] = "GetTransactionById";
+    Layout = "esmaelLayout";
+}
+<link href="/css/TransactionCSS/GetTransactionsById.css" rel="stylesheet" />
+
+<!-- Header Section -->
+<div class="header">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+            <div>
+                <h1 class="mb-0"><i class="fas fa-exchange-alt me-2"></i>Transaction Details</h1>
+                <p class="mb-0 mt-2">View complete information about inventory transactions</p>
+            </div>
+            <div class="mt-2 mt-md-0">
+                <button class="btn btn-light"><i class="fas fa-print me-2"></i>Print</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Back Button -->
+    <div class="mb-4">
+        <a href="/Transaction/GetAllTransactions" class="btn btn-light back-btn action-btn">
+            <i class="fas fa-arrow-left me-2"></i>Back to Transactions
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Main Transaction Card -->
+            <div class="card">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0"><i class="fas fa-receipt me-2"></i>Transaction #@Model.TransactionId</h5>
+                </div>
+                <div class="transaction-details">
+                    <div class="detail-row">
+                        <div class="detail-label">Transaction ID</div>
+                        <div class="detail-value">@Model.TransactionId</div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">Category</div>
+                        <div class="detail-value">@Model.Product.Category.Name</div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">Product</div>
+                        <div class="detail-value d-flex align-items-center">
+                            <img src="https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&h=400&q=80"
+                                 alt="Wireless Keyboard" class="product-image">
+                            <div>
+                                <h5 class="mb-1">@Model.Product.Name</h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">Transaction Type</div>
+                        <div class="detail-value">
+                            <span class="transaction-type @ViewBag.TransactionType">@ViewBag.TransactionType.ToUpper() </span>
+                        </div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">Quantity</div>
+                        <div class="detail-value">
+                            <span class="@ViewBag.QuantityStyle">@Model.QuantityChange Units</span>
+                        </div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">Price</div>
+                        <div class="detail-value">$@(Model.Product.Price) per unit</div>
+                    </div>
+                 <div class="detail-row">
+                        <div class="detail-label">Total Price</div>
+                        <div class="detail-value">$@(Math.Abs(Model.Product.Price*Model.QuantityChange))</div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">Transaction Date</div>
+                        <div class="detail-value">@Model.TransactionDate.ToString("dd/MM/yyyy HH:mm:ss")</div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">Warehouse</div>
+                        <div class="detail-value">@Model.WareHouse.Name</div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <!-- Product Details Section -->
+            <div class="detail-section">
+                <h4 class="section-title"><i class="fas fa-box me-2"></i>Product Details</h4>
+
+                <div class="row">
+                    <div class="col-md-4 mb-4 mb-md-0">
+                        <div class="text-center">
+                            <img src="https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&h=400&q=80"
+                                 alt="Wireless Keyboard" class="img-fluid rounded" style="max-height: 200px;">
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="info-group">
+                            <div class="info-icon">
+                                <i class="fas fa-tag"></i>
+                            </div>
+                            <div class="info-text">
+                                <h5>Product ID</h5>
+                                <p>@Model.Product.ProductId</p>
+                            </div>
+                        </div>
+
+                        <div class="info-group">
+                            <div class="info-icon">
+                                <i class="fas fa-align-left"></i>
+                            </div>
+                            <div class="info-text">
+                                <h5>Description</h5>
+                                <p>@Model.Product.Description</p>
+                            </div>
+                        </div>
+
+                        <div class="info-group">
+                            <div class="info-icon">
+                                <i class="fas fa-layer-group"></i>
+                            </div>
+                            <div class="info-text">
+                                <h5>Category</h5>
+                                <p>@Model.Product.Category.Name</p>
+                            </div>
+                        </div>
+
+                        <div class="info-group">
+                            <div class="info-icon">
+                                <i class="fas fa-warehouse"></i>
+                            </div>
+                            <div class="info-text">
+                                <h5>Current Stock</h5>
+                                <p>@Model.Product.TotalStocQuantity</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <!-- User Details Section -->
+            <div class="detail-section">
+                <h4 class="section-title"><i class="fas fa-user me-2"></i>User Information</h4>
+
+                <div class="user-info-grid">
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&h=400&q=80"
+                             alt="John Smith" class="user-image">
+                    </div>
+                    <div>
+                        <h4 class="user-name">@Model.User.UserName</h4>
+                        <div class="user-role text-success">Admin</div>
+
+                    </div>
+                </div>
+
+                <div class="info-group">
+                    <div class="info-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="info-text">
+                        <h5>Email</h5>
+                        <p>@Model.User.Email</p>
+                    </div>
+                </div>
+
+                <div class="info-group">
+                    <div class="info-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div class="info-text">
+                        <h5>Phone</h5>
+                        <p>@Model.User.PhoneNumber</p>
+                    </div>
+                </div>
+
+                <div class="info-group">
+                    <div class="info-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="info-text">
+                        <h5>Location</h5>
+                        <p>@Model.User.Address</p>
+                    </div>
+                </div>
+
+                <div class="user-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">@Model.User.Transactions.Count()</div>
+                        <div class="stat-label">Transactions</div>
+                    </div>
+                </div>
+
+                <div class="d-grid mt-3">
+                    <button class="btn btn-outline-primary">
+                        <i class="fas fa-envelope me-2"></i>Send Message
+                    </button>
+                </div>
+            </div>
+
+            <!-- Warehouse Details Section -->
+            <div class="detail-section">
+                <h4 class="section-title"><i class="fas fa-warehouse me-2"></i>Warehouse Details</h4>
+
+                <div class="info-group">
+                    <div class="info-icon">
+                        <i class="fas fa-signature"></i>
+                    </div>
+                    <div class="info-text">
+                        <h5>Warehouse Name</h5>
+                        <p>@Model.WareHouse.Name</p>
+                    </div>
+                </div>
+
+                <div class="info-group">
+                    <div class="info-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="info-text">
+                        <h5>Location</h5>
+                        <p>@Model.WareHouse.Location</p>
+                    </div>
+                </div>
+
+                <div class="info-group">
+                    <div class="info-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div class="info-text">
+                        <h5>Phone Number</h5>
+                        <p>@Model.WareHouse.PhoneNumber</p>
+                    </div>
+                </div>
+
+                <div class="info-group">
+                    <div class="info-icon">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div class="info-text">
+                        <h5>Status</h5>
+                        <p><span class="badge @ViewBag.WareHouseStyle">@ViewBag.WareHouseStatus</span></p>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <div class="d-grid">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-map-marked-alt me-2"></i>View on Map
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Timeline -->
+            <div class="detail-section">
+                <h4 class="section-title"><i class="fas fa-history me-2"></i>Recent Activity</h4>
+                <div class="timeline">
+
+                    @for (int i = 0; i < 4; i++)
+                    {
+                        <div class="timeline-item">
+                            @if (ViewBag.UserTransactions[i].TransactionDate.ToString("dd/MM/yyyy").Equals(DateTime.Now.ToString("dd/MM/yyyy")))
+                            {
+                                <div class="timeline-date">Today @ViewBag.UserTransactions[i].TransactionDate.ToString("HH:mm:ss")</div>
+                            }
+                            else
+                            {
+                                <div class="timeline-date">@ViewBag.UserTransactions[i].TransactionDate.ToString("dd/MM/yyyy HH:mm:ss")</div>
+                            }
+                            <div class="timeline-content">
+                                <strong>@ViewBag.UserTransactions[i].TransactionType <br /></strong>
+                                @if (ViewBag.UserTransactions[i].TransactionType.ToLower() == "in")
+                                {
+                                    <span class="badge bg-success">@ViewBag.UserTransactions[i].QuantityChange Unit of @ViewBag.UserTransactions[i].Product.Name Added</span>
+                                }
+                                else if (ViewBag.UserTransactions[i].TransactionType.ToLower() == "out")
+                                {
+                                    <span class="badge bg-danger">@ViewBag.UserTransactions[i].QuantityChange Unit of @ViewBag.UserTransactions[i].Product.Name withdrawn</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">@ViewBag.UserTransactions[i].QuantityChange Unit of @ViewBag.UserTransactions[i].Product.Name Adjusted</span>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>

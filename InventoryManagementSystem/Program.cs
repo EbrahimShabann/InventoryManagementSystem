@@ -29,6 +29,8 @@ namespace InventoryManagementSystem
 
             builder.Services.AddDbContext<AppDbContext>();
             builder.Services.AddScoped<IWareHouseRepository, WareHouseRepository>();
+            builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+
 
 
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
