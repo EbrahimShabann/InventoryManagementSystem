@@ -30,14 +30,14 @@ namespace InventoryManagementSystem.Controllers
            var UsersList =db.ApplicationUsers.ToList();
             foreach (var user in UsersList)
             {
-				string userRole = uof.AppUserRepo.GetRoleByUserId(user.Id);
+				string userRole = uof.AppUserRepo.GetRoleOfUser(user.Id);
 				user.Role = userRole;
             }
             var paged = UsersList.ToPagedResult(page, size);
           
             return View(paged);
         }
-		public IActionResult RoleManagment(string id)
+		public IActionResult UpSert(string id)
 		{
 			UserVM userVM;
 
@@ -48,7 +48,7 @@ namespace InventoryManagementSystem.Controllers
 			});
 
 
-            ; if (id == null || id == "")
+            if (id == null || id == "")
 			{
                  userVM = new()
                 {
@@ -56,50 +56,123 @@ namespace InventoryManagementSystem.Controllers
                   RolesList=Roles
 
                 };
-                return PartialView(new UserVM());
+                return PartialView(userVM);
 
             }
-            string userRole = uof.AppUserRepo.GetRoleByUserId(id);
-			 userVM = new()
-			{
-				ApplicationUser = uof.AppUserRepo.GetUserById(id),
-				RolesList = Roles
+            else
+            {
+                string userRole = uof.AppUserRepo.GetRoleOfUser(id);
+                userVM = new()
+                {
+                    ApplicationUser = uof.AppUserRepo.GetUserById(id),
+                    RolesList = Roles
 
 
-			};
-			userVM.ApplicationUser.Role = userRole;
-
-            return PartialView(userVM);
+                };
+                userVM.UserName= userVM.ApplicationUser.UserName ;
+                userVM.Email = userVM.ApplicationUser.Email;
+                userVM.PhoneNumber = userVM.ApplicationUser.PhoneNumber;
+                userVM.ApplicationUser.Role = userRole;
+               
+                return PartialView(userVM);
+            }
+              
 	    }
 		[HttpPost]
-		public IActionResult RoleManagment(UserVM userVM)
+		public async Task<IActionResult> UpSert(UserVM userVM,IFormFile file)
 		{
-			string oldRole = uof.AppUserRepo.GetRoleByUserId(userVM.ApplicationUser.Id);
-			string newRole = db.Roles.FirstOrDefault(u => u.Id == userVM.ApplicationUser.Role).Name;
-			if (userVM.ApplicationUser.Role != oldRole)
-			{
-				//Role was updated
-				ApplicationUser applicationUser = uof.AppUserRepo.GetUserById(userVM.ApplicationUser.Id);
-				//if(newRole == StaticDetails.Manager_Role)
-				//{
-				//	applicationUser.CompanyId = userVM.ApplicationUser.CompanyId;
-				//}
-				//if(oldRole == StaticDetails.Company_Role)
-				//{
-				//	applicationUser.CompanyId = null;
-				//}
-				uof.Save();
-				_userManager.RemoveFromRoleAsync(applicationUser, oldRole).GetAwaiter().GetResult();
-				
-				_userManager.AddToRoleAsync(applicationUser, newRole).GetAwaiter().GetResult();
-			}
-			return RedirectToAction("Index");
+            try
+            {
 
+
+                if (ModelState.IsValid)
+                {
+                    if (file != null)
+                    {
+                        string fileName = Path.GetFileName(file.FileName);
+                        string FinalPath = Path.Combine("wwwroot", "images", fileName);
+                        userVM.ApplicationUser.Image = fileName;
+                        using (var stream = new FileStream(FinalPath, FileMode.Create))
+                        {
+                            file.CopyTo(stream);
+                        }
+                    }
+                    var userFromDb = uof.AppUserRepo.GetUserById(userVM.ApplicationUser.Id);
+                    if (userFromDb == null)
+                    {
+                        //not existed in db means creating new one
+                        userVM.ApplicationUser.UserName = userVM.UserName;
+                        userVM.ApplicationUser.Email = userVM.Email;
+                        userVM.ApplicationUser.PhoneNumber = userVM.PhoneNumber;
+                        userVM.ApplicationUser.EmailConfirmed = true;
+                        string roleName = uof.AppUserRepo.GetRoleName(userVM.ApplicationUser.Role);
+                        string password = userVM.ApplicationUser.UserName + "A253@"; //  create password from username + A253@ ex ahmedA253@ || managerA253@
+
+                        await _userManager.CreateAsync(userVM.ApplicationUser, password);
+                        await _userManager.AddToRoleAsync(userVM.ApplicationUser,roleName);
+                    }
+                    else
+                    {
+                        //user existed and try to update it
+                        string oldRole = uof.AppUserRepo.GetRoleOfUser(userVM.ApplicationUser.Id);
+                        string newRole = uof.AppUserRepo.GetRoleName(userVM.ApplicationUser.Role);
+                        if (newRole != oldRole)
+                        {
+                            //Role was updated
+                            if (oldRole != null)
+                            {
+                                await _userManager.RemoveFromRoleAsync(userFromDb, oldRole);
+
+                            }
+                            await _userManager.AddToRoleAsync(userFromDb, newRole);
+
+                        }
+                        if (userVM.ApplicationUser.Image != null)
+                        {
+                            userFromDb.Image = userVM.ApplicationUser.Image;
+
+                        }
+                        await _userManager.UpdateAsync(userFromDb);
+                        //uof.AppUserRepo.Update(userFromDb);
+                        //uof.Save();
+
+                    }
+                    return RedirectToAction("Index");
+                }
+            }
+            catch (Exception ex) 
+            {
+                ModelState.AddModelError("Ex", ex.Message);
+            
+            }
+            return PartialView(userVM);
 			
 		}
 
 
+        public IActionResult Delete(string id)
+        {
+            var user = uof.AppUserRepo.GetUserById(id);
+            
+            if (user != null)
+            {
 
+                uof.AppUserRepo.DeleteUser(user);
+                uof.Save();
+                return RedirectToAction("Index");
+            }
+            return PartialView("Error");
+        }
+
+        public IActionResult Details(string id)
+        {
+            var user = uof.AppUserRepo.GetUserById(id);
+            if (user != null)
+            {
+                return View(user);
+            }
+            return View("Error");
+        }
 	}
 }
 

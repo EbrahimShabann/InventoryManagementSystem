@@ -31,6 +31,7 @@ namespace InventoryManagementSystem.Services.Data
 
                 //if role isn't created , then we will create admin user as well
                 await _roleManager.CreateAsync(new IdentityRole(StaticDetails.Admin_Role));
+                await _roleManager.CreateAsync(new IdentityRole(StaticDetails.Manager_Role));
 
                 var admin = new ApplicationUser
                 {
