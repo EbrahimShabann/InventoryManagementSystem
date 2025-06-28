@@ -53,6 +53,7 @@ namespace InventoryManagementSystem.Repositories
             }
             return transaction;
         }
+
         public Models.Transaction GetById(int? id)
         {
             return transactions.FirstOrDefault(t => t.TransactionId == id);
