@@ -48,6 +48,5 @@ namespace InventoryManagementSystem.Models
         In,
         Out,
         Adjustment
-
     }
 }
