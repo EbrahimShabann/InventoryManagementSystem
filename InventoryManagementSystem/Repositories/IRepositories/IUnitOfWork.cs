@@ -7,9 +7,9 @@ namespace InventoryManagementSystem.Repositories.IRepositories
         public IWareHouseRepo warehouseRepo { get; }
         public IInventoryItemRepo inventoryItemRepo { get; }
         public ISupplierRepo supplierRepo { get; }
-        public IAppUserRepo AppUserRepo { get;  }
+        public IAppUserRepo AppUserRepo { get; }
+        public ICategoryRepo categoryRepo { get; }
 
         void Save();
-
     }
 }

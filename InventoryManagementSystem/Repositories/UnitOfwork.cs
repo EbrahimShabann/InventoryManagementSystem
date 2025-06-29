@@ -11,6 +11,7 @@ namespace InventoryManagementSystem.Repositories
         IInventoryItemRepo _inventoryItemRepo;
         ISupplierRepo _supplierRepo;
         IAppUserRepo userRepo;
+        ICategoryRepo _categoryRepo;
         public UnitOfwork(AppDbContext db)
         {
             this.db = db;
@@ -49,7 +50,15 @@ namespace InventoryManagementSystem.Repositories
                 return userRepo ;
             } 
          }
-
+        public ICategoryRepo categoryRepo
+        {
+            get
+            {
+                if (_categoryRepo != null) return _categoryRepo;
+                _categoryRepo = new CategoryRepository(db);
+                return _categoryRepo;
+            }
+        }
         public void Save()
         {
             db.SaveChanges();
