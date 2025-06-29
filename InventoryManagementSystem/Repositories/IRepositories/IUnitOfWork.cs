@@ -1,8 +1,14 @@
-﻿namespace InventoryManagementSystem.Repositories.IRepositories
+﻿using InventoryManagementSystem.Models;
+
+namespace InventoryManagementSystem.Repositories.IRepositories
 {
     public interface IUnitOfWork
     {
-        public IWareHouseRepository WareHouse { get; }
+        public IWareHouseRepo warehouseRepo { get; }
+        public IInventoryItemRepo inventoryItemRepo { get; }
+        public ISupplierRepo supplierRepo { get; }
+        public IAppUserRepo AppUserRepo { get; }
+        public ICategoryRepo categoryRepo { get; }
 
         void Save();
     }

@@ -7,6 +7,5 @@
         void Add (T obj);
         void Update (T obj);
         void Delete (int? id);
-        
     }
 }

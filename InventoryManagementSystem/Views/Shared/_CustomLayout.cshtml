@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -13,6 +13,7 @@
     <link href="https://demos.creative-tim.com/argon-dashboard-pro/assets/css/nucleo-svg.css" rel="stylesheet" />
     <!-- Font Awesome Icons -->
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    
     <link href="~/assets/css/nucleo-icons.css" rel="stylesheet" />
     <link href="~/assets/css/argon-dashboard.min.css" rel="stylesheet" />
     <link href="~/assets/css/nucleo-svg.css" rel="stylesheet" />
@@ -21,6 +22,8 @@
           integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
           crossorigin="anonymous"
           referrerpolicy="no-referrer" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body class="g-sidenav-show   bg-gray-100">
@@ -75,7 +78,11 @@
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li><a  class="dropdown-item" asp-controller="WareHouse" asp-action="Index">WareHouses</a></li>
-                                <li><a class="dropdown-item" asp-controller="Transaction" asp-action="GetAllTransactions">Transactions</a></li>
+
+                                  <li><a class="dropdown-item" asp-controller="User" asp-action="Index">Users</a></li>
+
+                                   <li><a class="dropdown-item" asp-controller="Product" asp-action="Index">Product</a></li>
+
                                     <li><a class="dropdown-item" asp-controller="" asp-action="Index"></a></li>
                                     <li><a class="dropdown-item" asp-controller="" asp-action="Index"></a></li>
                                 </ul>
@@ -200,6 +207,12 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="../assets/js/argon-dashboard.min.js?v=2.1.0"></script>
+    <script>
+        // Initialize tooltips
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>

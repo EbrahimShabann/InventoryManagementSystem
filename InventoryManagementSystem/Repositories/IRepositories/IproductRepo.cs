@@ -2,7 +2,8 @@
 
 namespace InventoryManagementSystem.Repositories.IRepositories
 {
-    public interface IWareHouseRepository:IRepository<WareHouse>
+    public interface IproductRepo:IRepository<Product>
     {
+        void save();
     }
 }

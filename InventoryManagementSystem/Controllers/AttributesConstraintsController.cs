@@ -1,18 +1,44 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using InventoryManagementSystem.Models;
+using InventoryManagementSystem.Services.Data;
+using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryManagementSystem.Controllers
 {
     public class AttributesConstraintsController : Controller
     {
-        public IActionResult CheckUniqueness(string Name)
+        private readonly AppDbContext db;
+
+        public AttributesConstraintsController(AppDbContext db)
         {
-            return View();
+            this.db = db;
         }
-        public IActionResult CheckSKUunique(string SKU)
+        public IActionResult CheckWHNameUniq(string Name ,int WareHouseId)
         {
-            return View();
+            //check uniqness of warehouse name 
+            var ware = db.WareHouses.FirstOrDefault(w => w.Name == Name);
+            if (ware != null && WareHouseId!=ware.WareHouseId)   // in case adding new one only or update another ware with name that is existed already
+            {
+                return Json("This wareHouse is already existed");
+            }
+            return Json(true);
+
         }
-       
+        public IActionResult CheckCatNameUniq(string Name,int CategoryId)
+        {
+            //check uniqness of category name 
+            var cat = db.Categories.FirstOrDefault(w => w.Name == Name);
+            if (cat != null && CategoryId == 0)
+            {
+                return Json("This Category is already existed");
+            }
+            return Json(true);
+
+        }
+        //public IActionResult CheckSKUunique(string SKU)
+        //{
+        //    return View();
+        //}
+
         public IActionResult CheckTransType(string TransactionType)
         {
             if(TransactionType.ToLower()=="in" || TransactionType.ToLower() == "out" 

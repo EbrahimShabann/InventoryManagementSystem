@@ -11,6 +11,7 @@ namespace InventoryManagementSystem.Services.Data
 		//Roles of Users
 		
 		public const string Admin_Role = "Admin";
+		public const string Manager_Role = "Manager";
 
 
 		

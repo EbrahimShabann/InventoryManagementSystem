@@ -28,9 +28,7 @@ namespace InventoryManagementSystem
 
 
             builder.Services.AddDbContext<AppDbContext>();
-            builder.Services.AddScoped<IWareHouseRepository, WareHouseRepository>();
-            builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
-
+            builder.Services.AddScoped<IUnitOfWork, UnitOfwork>();
 
 
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -40,6 +38,8 @@ namespace InventoryManagementSystem
             builder.Services.AddScoped<IDbInitializer, DbInitializer>();
             builder.Services.AddScoped<IEmailSender,EmailSender>();
             builder.Services.AddRazorPages();
+            builder.Services.AddScoped<IproductRepo, ProdcutRepo>();
+
 
 
 

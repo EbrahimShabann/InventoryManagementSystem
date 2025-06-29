@@ -1,10 +1,12 @@
 ﻿using InventoryManagementSystem.Models;
 using InventoryManagementSystem.Repositories.IRepositories;
 using InventoryManagementSystem.Services.Data;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace InventoryManagementSystem.Repositories
 {
-    public class WareHouseRepository : IWareHouseRepository
+    public class WareHouseRepository:IWareHouseRepo
     {
         private readonly AppDbContext db;
 
@@ -12,19 +14,20 @@ namespace InventoryManagementSystem.Repositories
         {
             this.db = db;
         }
+      
         public void Add(WareHouse obj)
         {
             db.WareHouses.Add(obj);
-            
         }
 
         public void Delete(int? id)
         {
-            var wareHouseFromDb = db.WareHouses.SingleOrDefault(w=>w.WareHouseId==id);
-            if (wareHouseFromDb != null) 
-            {
-                db.WareHouses.Remove(wareHouseFromDb);
-            }
+           db.WareHouses.Remove(GetById(id));
+        }
+
+        public void Update(WareHouse obj)
+        {
+            db.Entry(obj).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
         }
 
         public List<WareHouse> GetAll()
@@ -34,18 +37,26 @@ namespace InventoryManagementSystem.Repositories
 
         public WareHouse GetById(int? id)
         {
-                return db.WareHouses.Find(id);
-        
+            return db.WareHouses.Find(id);
         }
 
-        
-
-        public void Update(WareHouse obj)
+        public List<WareHouse> sort(string sortOrder)
         {
-           if(obj!= null)
+
+            var wareHouses = from w in db.WareHouses
+                        select w;
+
+            wareHouses = sortOrder switch
             {
-                db.WareHouses.Update(obj);
-            }
+                "id_desc" => wareHouses.OrderByDescending(u => u.WareHouseId),
+                "name_desc" => wareHouses.OrderByDescending(u => u.Name),
+                "loca" => wareHouses.OrderBy(u => u.Location),
+                "loca_desc" => wareHouses.OrderByDescending(u => u.Location),
+                "phone" => wareHouses.OrderBy(u => u.PhoneNumber),
+                "phone_desc" => wareHouses.OrderByDescending(u => u.PhoneNumber),
+                _ => wareHouses.OrderBy(u => u.WareHouseId),
+            };
+            return wareHouses.ToList();
         }
     }
 }
