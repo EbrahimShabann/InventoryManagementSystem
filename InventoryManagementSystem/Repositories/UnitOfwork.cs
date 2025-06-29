@@ -8,24 +8,47 @@ namespace InventoryManagementSystem.Repositories
     {
         private readonly AppDbContext db;
         IWareHouseRepo _wareHouseRepo;
+        IInventoryItemRepo _inventoryItemRepo;
+        ISupplierRepo _supplierRepo;
         IAppUserRepo userRepo;
         public UnitOfwork(AppDbContext db)
         {
             this.db = db;
         }
-        public IWareHouseRepo warehouseRepo { get
+        public IWareHouseRepo warehouseRepo
+        {
+            get
             {
                 if (_wareHouseRepo != null) return _wareHouseRepo;
                 _wareHouseRepo = new WareHouseRepository(db);
-                return _wareHouseRepo ;
-            } }
+                return _wareHouseRepo;
+            }
+        }
+        public IInventoryItemRepo inventoryItemRepo
+        {
+            get
+            {
+                if (_inventoryItemRepo != null) return _inventoryItemRepo;
+                _inventoryItemRepo = new InventoryItemRepository(db);
+                return _inventoryItemRepo;
+            }
+        }
+        public ISupplierRepo supplierRepo
+        {
+            get
+            {
+                if (_supplierRepo != null) return _supplierRepo;
+                _supplierRepo = new SupplierRepository(db);
+                return _supplierRepo;
+            }
+        }
         public IAppUserRepo AppUserRepo { get
             {
                 if (userRepo != null) return userRepo;
                 userRepo = new AppUserRepo(db);
                 return userRepo ;
-            } }
-
+            } 
+         }
 
         public void Save()
         {
