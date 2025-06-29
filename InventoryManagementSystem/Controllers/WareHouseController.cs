@@ -3,6 +3,7 @@ using InventoryManagementSystem.Repositories.IRepositories;
 using InventoryManagementSystem.Services.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using System.Drawing;
 
 namespace InventoryManagementSystem.Controllers
 {
@@ -16,19 +17,28 @@ namespace InventoryManagementSystem.Controllers
             this.uof = uof;
         }
 
-        public IActionResult Index(string sortOrder, int page = 1, int size = 10)
+
+
+        public IActionResult Index(int page = 1, int size = 10)
         {
-
-            ViewData["IdSortParam"] = String.IsNullOrEmpty(sortOrder) ? "id_desc" : "";
-            ViewData["NameSortParam"] = sortOrder == "name" ? "name_desc" : "name";
-            ViewData["locationSortParam"] = sortOrder == "location" ? "loca_desc" : "loca";
-            ViewData["phoneSortParam"] = sortOrder == "phone" ? "phone_desc" : "phone";
-
-            var wareHouses = uof.warehouseRepo.sort(sortOrder).AsEnumerable();
+            var wareHouses = uof.warehouseRepo.sort(""); // Default sort by ID
             var pagedResult = wareHouses.ToPagedResult(page, size);
             return View(pagedResult);
         }
 
+        public IActionResult sortTable(string sortOrder, int page = 1, int size = 10)
+        {
+            ViewData["IdSortParam"] = String.IsNullOrEmpty(sortOrder) ? "id_desc" : "";
+            ViewData["NameSortParam"] = sortOrder == "name" ? "name_desc" : "name";
+            ViewData["locationSortParam"] = sortOrder == "loca" ? "loca_desc" : "loca";
+            ViewData["phoneSortParam"] = sortOrder == "phone" ? "phone_desc" : "phone";
+
+            var wareHouses = uof.warehouseRepo.sort(sortOrder).AsEnumerable();
+            ViewBag.sortOrder = sortOrder;
+            var pagedResult = wareHouses.ToPagedResult(page, size);
+            return PartialView("sortTable", pagedResult);
+
+        }
         public IActionResult Details(int WareHouseId)
         {
             if (WareHouseId == 0) return View("Error");

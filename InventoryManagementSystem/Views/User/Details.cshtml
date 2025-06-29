@@ -1,0 +1,42 @@
+﻿@model ApplicationUser
+
+@{
+    ViewData["Title"] = "Details";
+}
+<style>
+    #mail:hover{
+        text-decoration:none;
+        color:royalblue
+    }
+</style>
+<h1>Details</h1>
+<div class="d-flex flex-row-reverse me-4">
+    <div>
+        <a class=" btn btn-outline-light " asp-action="Index">Back to List</a>
+
+    </div>
+
+</div>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-body text-center pb-0">
+                    <img src="/images/@Model.Image" 
+                         class="img-fluid rounded-circle border border-3 border-light shadow-sm mb-4"
+                         alt="User Profile Picture"
+                         style="width: 150px; height: 150px; object-fit: cover;">
+
+                    <h5 class="card-title fs-3 fw-bold mb-2">@Model.UserName</h5>
+                    <a id="mail" href="mailto:@Model.Email" class="card-title fs-5 fw-bold mb-2"><i class="fa-solid fa-envelope"></i>@Model.Email</a>
+                    <h4 class="card-title fs-5 fw-bold mb-2"><i class="fa-solid fa-phone"></i>@Model.PhoneNumber</h4>
+
+                    <p class="card-text text-muted mb-4">
+                        <i class="fa-solid fa-location-dot"></i>@Model.Address
+                    </p>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+</div>

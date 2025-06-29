@@ -1,0 +1,98 @@
+﻿@model UserVM
+
+@{
+    var roleId="";
+    if (Model.ApplicationUser.Role != null)
+    {
+         roleId = Model.RolesList.FirstOrDefault(r => r.Text == Model.ApplicationUser.Role).Value;
+
+    }
+}
+<div class="card shadow ">
+    <div class="card-header text-white bg-dark d-flex justify-content-between">
+        <h2 class="text-white ">@(Model.ApplicationUser.UserName != null ? "Edit " : "Add ") User </h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fa-solid fa-xmark bg-dark text-light"></i>
+        </button>
+
+    </div>
+
+    <div class="card-body ">
+        <form class="m-3"
+              id="upsertForm"
+              asp-controller="User"
+              asp-action="UpSert"
+              data-ajax="true"
+              data-ajax-method="post"
+              data-ajax-mode="replace"
+              data-ajax-update="#modalBody"
+              enctype="multipart/form-data">
+            <input asp-for="ApplicationUser.Id" type="hidden" />
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div>
+                <label asp-for="UserName" class="m-2"></label>
+                <input class="form form-control w-100 m-2" asp-for="UserName" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+
+            </div>
+            <div>
+                <label asp-for="Email" class="m-2"></label>
+                <input class="form form-control w-100 m-2" asp-for="Email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+
+            </div>
+           
+          
+            <div>
+                <label asp-for="ApplicationUser.Address" class="m-2"></label>
+                <input class="form form-control w-100 m-2" asp-for="ApplicationUser.Address" />
+                <span asp-validation-for="ApplicationUser.Address" class="text-danger"></span>
+
+            </div>
+            <div>
+                <label asp-for="PhoneNumber" class="m-2"></label>
+                <input class="form form-control w-100 m-2" asp-for="PhoneNumber" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+
+            </div>
+            <div>
+                <label asp-for="ApplicationUser.Image" class="m-2"></label>
+                <input type="file" name="file" value="@Model.ApplicationUser.Image" accept="image/*" />
+                
+
+            </div>
+
+            @if(Model.ApplicationUser.UserName == null)
+            {
+                <div>
+                    <label asp-for="ApplicationUser.Role" class="m-2"></label>
+                    <select class="form form-select" asp-for="ApplicationUser.Role" asp-items="@Model.RolesList">
+                        <option value=""> --Select Role--</option>
+                    </select>
+                    <span asp-validation-for="ApplicationUser.Role" class="text-danger"></span>
+
+                </div>
+            }
+            else
+            {
+                <div>
+                    <label asp-for="ApplicationUser.Role" class="m-2"></label>
+                    <select class="form form-select" asp-for="ApplicationUser.Role" asp-items="@Model.RolesList">
+                        <option value="@roleId" >@Model.ApplicationUser.Role</option>
+                    </select>
+                    <span asp-validation-for="ApplicationUser.Role" class="text-danger"></span>
+
+                </div>
+            }
+
+
+            <div class="d-flex justify-content-between mt-3">
+                <button type="submit" class=" btn btn-success  form form-control">Save</button>
+                <button type="button" class="btn btn-secondary form form-control" data-bs-dismiss="modal">Close</button>
+
+            </div>
+        </form>
+    </div>
+</div>
+<partial name="_ValidationScriptsPartial" />

@@ -1,0 +1,78 @@
+﻿ @model PagedResult<WareHouse>
+
+ 
+<table class="table align-items-center mb-0">
+                        <thead>
+                            <tr>
+                                <th class="text-center">
+                                   <a class="sort" href="#"  data-sortorder="@ViewData["IdSortParam"]"> 
+                                       WareHouse Id @(ViewBag.sortOrder== "id_desc" ? "↓" :ViewBag.sortOrder == null ? "↑" : "")
+                                    </a>
+                                </th>
+                                <th class="text-center">
+                                 <a class="sort" href="#"  data-sortorder="@ViewData["NameSortParam"]">
+                                     WareHouse Name@(ViewBag.sortOrder== "name_desc" ? "↓" :ViewBag.sortOrder == "name" ? "↑" : "")
+                                 </a>
+                                </th>
+                                <th class="text-center">
+                                    <a class="sort" href="#"  data-sortorder="@ViewData["locationSortParam"]">
+                                        Location@(ViewBag.sortOrder== "loca_desc" ? "↓" :ViewBag.sortOrder == "loca" ? "↑" : "")
+                                     </a>
+                                </th >
+                                <th class="text-center">
+                                   <a class="sort" href="#"  data-sortorder="@ViewData["phoneSortParam"]">
+                                       PhoneNumber@(ViewBag.sortOrder== "phone_desc" ? "↓" :ViewBag.sortOrder == "phone" ? "↑" : "")
+                                   </a>
+                                </th>
+                                <th class="text-center">
+                                    IsActive
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            @foreach (var item in Model.TotalItems)
+                            {
+                                  <tr>
+                                   
+                                    <td>
+                                        <p class="text-xs text-center font-weight-bold mb-0"> @item.WareHouseId</p>
+                                    </td>
+                                    <td class="align-middle text-center text-sm">
+                                        <span class="text-secondary text-xs font-weight-bold">@item.Name</span>
+                                    </td>
+                                   <td class="align-middle text-center text-sm">
+                                        <span class="text-secondary text-xs font-weight-bold">@item.Location</span>
+                                    </td>
+                                   <td class="align-middle text-center text-sm">
+                                        <span class="text-secondary text-xs font-weight-bold">@item.PhoneNumber</span>
+                                    </td>
+                                   <td class="align-middle text-center text-sm">
+                                        @if (item.IsActive == true)
+                                        {
+                                            <span class="badge badge-sm " style="background-color:green">@item.IsActive</span>
+
+                                        }
+                                        else
+                                        {
+                                             <span class="badge badge-sm " style="background-color:red">@item.IsActive</span>
+
+                                        }
+                                    </td>
+                                  
+                                    <td class="align-middle btn btn-primary ms-1">
+                                        <a href="/WareHouse/Details?WareHouseId=@item.WareHouseId" class=" text-secondary font-weight-bold text-xs page-link" >Details</a>
+                                    </td>
+                                  
+                                    <td class="align-middle btn btn-dark ms-1">
+                                        <a class="UpSert-btn text-secondary font-weight-bold text-xs page-link" data-id="@item.WareHouseId">Edit</a>
+                                    </td>
+                                    <td class="align-middle btn btn-danger">
+                                        <button class="delete-btn text-secondary font-weight-bold text-xs page-link" data-id="@item.WareHouseId">Delete</button>
+                                    </td>
+                                
+                                </tr>
+                                
+                            }
+                        </tbody>
+                    </table>
