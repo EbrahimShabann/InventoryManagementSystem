@@ -13,7 +13,7 @@ namespace InventoryManagementSystem.Controllers
 
         public WareHouseController(IUnitOfWork uof)
         {
-            
+
             this.uof = uof;
         }
 
@@ -41,7 +41,7 @@ namespace InventoryManagementSystem.Controllers
         }
         public IActionResult Details(int WareHouseId)
         {
-            if(WareHouseId ==0 ) return View("Error");
+            if (WareHouseId == 0) return View("Error");
             var ware = uof.warehouseRepo.GetById(WareHouseId);
             return View(ware);
         }
@@ -53,7 +53,7 @@ namespace InventoryManagementSystem.Controllers
             else
             {
                 var wareHouseFromDb = uof.warehouseRepo.GetById(id);
-                return PartialView(wareHouseFromDb); 
+                return PartialView(wareHouseFromDb);
             }
         }
 
@@ -85,21 +85,21 @@ namespace InventoryManagementSystem.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("Ex",ex.Message);
+                ModelState.AddModelError("Ex", ex.Message);
                 return PartialView(ware);
             }
         }
 
-        public IActionResult Delete(int id) 
-        { 
-            if(id!=0)
+        public IActionResult Delete(int id)
+        {
+            if (id != 0)
             {
                 uof.warehouseRepo.Delete(id);
                 uof.Save();
                 return RedirectToAction("Index");
             }
             return View("Error");
-        
+
         }
     }
 }
