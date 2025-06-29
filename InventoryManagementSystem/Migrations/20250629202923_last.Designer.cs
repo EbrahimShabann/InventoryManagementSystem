@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementSystem.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250623113028_altersupplierAndCategoryColumns")]
-    partial class altersupplierAndCategoryColumns
+    [Migration("20250629202923_last")]
+    partial class last
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,6 +37,7 @@ namespace InventoryManagementSystem.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -159,7 +160,7 @@ namespace InventoryManagementSystem.Migrations
 
                     b.HasIndex("WareHouseId");
 
-                    b.ToTable("InventoryItem");
+                    b.ToTable("InventoryItems");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.Models.Product", b =>
@@ -312,8 +313,7 @@ namespace InventoryManagementSystem.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("WareHouseId");
 
