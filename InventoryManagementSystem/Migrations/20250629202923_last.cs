@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace InventoryManagementSystem.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class last : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,7 +32,7 @@ namespace InventoryManagementSystem.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValueSql: "1"),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -85,6 +85,22 @@ namespace InventoryManagementSystem.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "WareHouse",
+                columns: table => new
+                {
+                    WareHouseId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValueSql: "1")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WareHouse", x => x.WareHouseId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -102,7 +118,7 @@ namespace InventoryManagementSystem.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -123,7 +139,7 @@ namespace InventoryManagementSystem.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -143,7 +159,7 @@ namespace InventoryManagementSystem.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -161,13 +177,13 @@ namespace InventoryManagementSystem.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -187,7 +203,7 @@ namespace InventoryManagementSystem.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -199,12 +215,11 @@ namespace InventoryManagementSystem.Migrations
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    SKU = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
                     ReorderLevel = table.Column<int>(type: "int", nullable: false, defaultValueSql: "0"),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
-                    SupplierId = table.Column<int>(type: "int", nullable: false),
-                    CurrentStockQuantity = table.Column<int>(type: "int", nullable: false, defaultValueSql: "0")
+                    TotalStocQuantity = table.Column<int>(type: "int", nullable: false, defaultValueSql: "0"),
+                    CategoryId = table.Column<int>(type: "int", nullable: true),
+                    SupplierId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -213,14 +228,40 @@ namespace InventoryManagementSystem.Migrations
                         name: "FK_Product_Category_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Category",
-                        principalColumn: "CategoryId",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "CategoryId");
                     table.ForeignKey(
                         name: "FK_Product_Supplier_SupplierId",
                         column: x => x.SupplierId,
                         principalTable: "Supplier",
-                        principalColumn: "SupplierId",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "SupplierId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InventoryItems",
+                columns: table => new
+                {
+                    InventoryItemId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    WareHouseId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false, defaultValueSql: "0"),
+                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InventoryItems", x => x.InventoryItemId);
+                    table.ForeignKey(
+                        name: "FK_InventoryItems_Product_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Product",
+                        principalColumn: "ProductId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_InventoryItems_WareHouse_WareHouseId",
+                        column: x => x.WareHouseId,
+                        principalTable: "WareHouse",
+                        principalColumn: "WareHouseId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -233,7 +274,8 @@ namespace InventoryManagementSystem.Migrations
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     TransactionType = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     QuantityChange = table.Column<int>(type: "int", nullable: false),
-                    TransactionDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()")
+                    TransactionDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
+                    WareHouseId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -243,13 +285,19 @@ namespace InventoryManagementSystem.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Transaction_Product_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Product",
                         principalColumn: "ProductId",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Transaction_WareHouse_WareHouseId",
+                        column: x => x.WareHouseId,
+                        principalTable: "WareHouse",
+                        principalColumn: "WareHouseId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -298,15 +346,19 @@ namespace InventoryManagementSystem.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_InventoryItems_ProductId",
+                table: "InventoryItems",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InventoryItems_WareHouseId",
+                table: "InventoryItems",
+                column: "WareHouseId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Product_CategoryId",
                 table: "Product",
                 column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Product_SKU",
-                table: "Product",
-                column: "SKU",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Product_SupplierId",
@@ -328,6 +380,11 @@ namespace InventoryManagementSystem.Migrations
                 name: "IX_Transaction_UserId",
                 table: "Transaction",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transaction_WareHouseId",
+                table: "Transaction",
+                column: "WareHouseId");
         }
 
         /// <inheritdoc />
@@ -349,6 +406,9 @@ namespace InventoryManagementSystem.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "InventoryItems");
+
+            migrationBuilder.DropTable(
                 name: "Transaction");
 
             migrationBuilder.DropTable(
@@ -359,6 +419,9 @@ namespace InventoryManagementSystem.Migrations
 
             migrationBuilder.DropTable(
                 name: "Product");
+
+            migrationBuilder.DropTable(
+                name: "WareHouse");
 
             migrationBuilder.DropTable(
                 name: "Category");
