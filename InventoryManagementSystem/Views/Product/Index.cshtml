@@ -18,13 +18,25 @@
                         <p class="card-text">
                             <strong>ID:</strong> @item.ProductId<br />
                             <strong>Description:</strong> @item.Description<br />
-                            <strong>Price:</strong> @item.Price <br/>
-                            <strong>ReorderLevel :</strong> @item.ReorderLevel<br/>
+                            <strong>Price:</strong> @item.Price <br />
+                            <strong>Reorder Level:</strong> @item.ReorderLevel<br />
                             <strong>Stock:</strong> @item.TotalStocQuantity<br />
-                            <strong>CategoryId:</strong> @item.CategoryId<br />
-                            <strong>SupplierId:</strong> @item.SupplierId<br />
 
+                            <strong>Category:</strong>
+                            @{
+                                var category = ((IEnumerable<Category>)ViewBag.Categoriey).FirstOrDefault(c => c.CategoryId == item.CategoryId);
+                            }
+                            @(category != null ? category.Name : "N/A")
+                            <br />
+
+                            <strong>Supplier:</strong>
+                            @{
+                                var supplier = ((IEnumerable<Supplier>)ViewBag.Supplier).FirstOrDefault(s => s.SupplierId == item.SupplierId);
+                            }
+                            @(supplier != null ? supplier.Name : "N/A")
+                            <br />
                         </p>
+
                         <a href="/Product/edit/@item.ProductId" class="btn btn-warning">Edit</a>
                         <a href="/Product/Delete/@item.ProductId" class="btn btn-danger">Delete</a>
 

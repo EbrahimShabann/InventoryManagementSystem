@@ -1,6 +1,8 @@
 ﻿@model Product
 @{
     ViewData["Title"] = "Edit";
+    var categoryOptions = new SelectList(ViewBag.Categoriey, "CategoryId", "Name");
+    var supplierOptions = new SelectList(ViewBag.Supplier, "SupplierId", "Name");
 }
 
 <h1>Edit Product</h1>
@@ -33,12 +35,17 @@
     </div>
     <div>
         <label>Category</label>
-        <input class="form form-control" asp-for="CategoryId" />
+        <select class="form form-control" asp-for="CategoryId" asp-items="categoryOptions">
+            <option value="">-- Select Category --</option>
+        </select>
         <span asp-validation-for="CategoryId" class="text-danger"></span>
     </div>
+
     <div>
         <label>Supplier</label>
-        <input class="form form-control" asp-for="SupplierId" />
+        <select class="form form-control" asp-for="SupplierId" asp-items="supplierOptions">
+            <option value="">-- Select Supplier --</option>
+        </select>
         <span asp-validation-for="SupplierId" class="text-danger"></span>
     </div>
     <div>
@@ -46,7 +53,7 @@
         <input class="form form-control" type="file" name="Image" accept=".png, .jpg, .jpeg, image/png, image/jpeg" />
     </div>
     <div class="text-center mt-3">
-        <input type="submit" value="Add" class="btn btn-success" />
+        <input type="submit" value="Save" class="btn btn-success" />
     </div>
 
 </form>

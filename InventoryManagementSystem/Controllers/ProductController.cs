@@ -6,17 +6,21 @@ namespace InventoryManagementSystem.Controllers
 {
     public class ProductController : Controller
     {
-        IproductRepo IproductRepo; 
+        IproductRepo IproductRepo;
+        private readonly IUnitOfWork uof;
 
-        public ProductController(IproductRepo repoProduct)
+
+        public ProductController(IproductRepo repoProduct, IUnitOfWork uof)
         {
-            IproductRepo=repoProduct;
-
+            IproductRepo = repoProduct;
+            this.uof = uof;
         }
 
         public IActionResult Index(int page = 1, int pageSize = 9)
         {
             var allProducts = IproductRepo.GetAll().ToList();
+            ViewBag.Categoriey = uof.categoryRepo.GetAll();
+            ViewBag.Supplier = uof.supplierRepo.GetAll();
 
             var pagedProducts = allProducts
                 .Skip((page - 1) * pageSize)
@@ -31,6 +35,9 @@ namespace InventoryManagementSystem.Controllers
 
         public IActionResult New()
         {
+            ViewBag.Categoriey = uof.categoryRepo.GetAll();
+            ViewBag.Supplier = uof.supplierRepo.GetAll();
+
             return View("New");
         }
         [HttpPost]
@@ -55,12 +62,16 @@ namespace InventoryManagementSystem.Controllers
                 return RedirectToAction("Index");
 
             }
+            ViewBag.Categoriey = uof.categoryRepo.GetAll();
+            ViewBag.Supplier = uof.supplierRepo.GetAll();
 
             return View("New", productRequest);
         }
         public IActionResult edit(int id)
         {
             var prd = IproductRepo.GetById(id);
+            ViewBag.Categoriey = uof.categoryRepo.GetAll();
+            ViewBag.Supplier = uof.supplierRepo.GetAll();
 
             if (prd == null)
             {
@@ -106,6 +117,8 @@ namespace InventoryManagementSystem.Controllers
                 IproductRepo.save();
                 return RedirectToAction("Index");
             }
+            ViewBag.Categoriey = uof.categoryRepo.GetAll();
+            ViewBag.Supplier = uof.supplierRepo.GetAll();
 
             return View("Modify", ProductRequest);
         }
