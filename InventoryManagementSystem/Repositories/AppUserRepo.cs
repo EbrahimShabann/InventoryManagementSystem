@@ -67,5 +67,23 @@ namespace InventoryManagementSystem.Repositories
         {
             db.ApplicationUsers.Remove(user);
         }
+
+        public List<ApplicationUser> GetAllManagers()
+        {
+          var managers=  (from user in db.ApplicationUsers
+             join userRole in db.UserRoles
+             on user.Id equals userRole.UserId
+             join role in db.Roles
+             on userRole.RoleId equals role.Id
+             where role.Name == "Manager"
+             select new ApplicationUser
+             {
+                 Id = user.Id,
+                 UserName = user.UserName
+             }).ToList();
+
+            return managers;
+
+        }
     }
 }

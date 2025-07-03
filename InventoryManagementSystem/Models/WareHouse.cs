@@ -32,5 +32,10 @@ namespace InventoryManagementSystem.Models
 
         public virtual List<InventoryItem> InventoryItems { get; set; }
 
+        public string ApplicationUserId { get; set; }
+
+        [ForeignKey("ApplicationUserId")]
+        public virtual ApplicationUser Manager { get; set; }
+
     }
 }

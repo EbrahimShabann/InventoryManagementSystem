@@ -26,5 +26,7 @@ namespace InventoryManagementSystem.Models
         [MinLength(20,ErrorMessage ="Address must be greater than 20 chars")]
         public string Address { get; set; }
         public virtual List<Transaction> Transactions { get; set; }
+
+        public virtual List<WareHouse> WareHouses { get; set; }
     }
 }
