@@ -3,7 +3,37 @@
     ViewData["Title"] = "Index";
 }
 
-<h1 class="text-center my-4">All Courses</h1>
+<form method="get" action="/Product/Index" class="mb-4">
+    <div class="row g-2">
+        <div class="col-md-3">
+            <input type="text" name="searchText" class="form-control" placeholder="Search by name or description" value="@ViewBag.SearchText" />
+        </div>
+        <div class="col-md-3">
+            <select name="categoryId" class="form-select">
+                <option value="">-- All Categories --</option>
+                @foreach (var cat in (IEnumerable<Category>)ViewBag.Categoriey)
+                {
+                    <option value="@cat.CategoryId" selected="@(ViewBag.CategoryId == cat.CategoryId ? "selected" : null)">@cat.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select name="supplierId" class="form-select">
+                <option value="">-- All Suppliers --</option>
+                @foreach (var sup in (IEnumerable<Supplier>)ViewBag.Supplier)
+                {
+                    <option value="@sup.SupplierId" selected="@(ViewBag.SupplierId == sup.SupplierId ? "selected" : null)">@sup.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary w-100">Search</button>
+        </div>
+    </div>
+</form>
+
+
+<h1 class="text-center my-4">All Porducts</h1>
 
 <div class="container">
     <div class="row g-4">
@@ -38,7 +68,7 @@
                         </p>
 
                         <a href="/Product/edit/@item.ProductId" class="btn btn-warning">Edit</a>
-                        <a href="/Product/Delete/@item.ProductId" class="btn btn-danger">Delete</a>
+                        <a href="#" onclick="confirmDelete(@item.ProductId)" class="btn btn-danger">Delete</a>
 
                     </div>
                 </div>
@@ -61,3 +91,20 @@
     }
 </div>
 
+<script>
+    function confirmDelete(productId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This product will be permanently deleted!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '/Product/Delete/' + productId;
+            }
+        });
+    }
+</script>
