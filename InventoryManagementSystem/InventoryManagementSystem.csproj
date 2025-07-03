@@ -5,11 +5,13 @@
         <Nullable>disable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
+	
+	<PropertyGroup>
+		<DisableJsBuildAssets>true</DisableJsBuildAssets>
+	</PropertyGroup>
 
-	<Target Name="PrintStaticWebAssets" AfterTargets="Build">
-		<Message Text="Asset: %(StaticWebAsset.Identity), RelativePath: %(RelativePath)" Importance="High" />
-	</Target>
-
+	
+	
 
 	<ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.6" />
@@ -39,4 +41,6 @@
     <Folder Include="wwwroot\lib\jquery\dist" />
   </ItemGroup>
 
+
+	
 </Project>

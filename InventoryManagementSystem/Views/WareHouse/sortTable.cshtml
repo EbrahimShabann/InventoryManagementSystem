@@ -25,6 +25,11 @@
                                    </a>
                                 </th>
                                 <th class="text-center">
+                                   <a class="sort" href="#"  data-sortorder="@ViewData["phoneSortParam"]">
+                                       Manager@(ViewBag.sortOrder== "phone_desc" ? "↓" :ViewBag.sortOrder == "phone" ? "↑" : "")
+                                   </a>
+                                </th>
+                                <th class="text-center">
                                     IsActive
                                 </th>
                                 <th></th>
@@ -46,6 +51,9 @@
                                     </td>
                                    <td class="align-middle text-center text-sm">
                                         <span class="text-secondary text-xs font-weight-bold">@item.PhoneNumber</span>
+                                    </td>
+                                   <td class="align-middle text-center text-sm">
+                                        <span class="text-secondary text-xs font-weight-bold">@item.Manager?.UserName</span>
                                     </td>
                                    <td class="align-middle text-center text-sm">
                                         @if (item.IsActive == true)
