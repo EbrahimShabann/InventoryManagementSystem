@@ -9,5 +9,6 @@ namespace InventoryManagementSystem.Repositories.IRepositories
         void DeleteUser(ApplicationUser user);
         void GetAllUsersRoles();
         string GetRoleName(string roleId);
+        List<ApplicationUser> GetAllManagers();
     }
 }

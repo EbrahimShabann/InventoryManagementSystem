@@ -49,6 +49,7 @@ namespace InventoryManagementSystem.Controllers
         [HttpGet]
         public IActionResult UpSert(int? id)
         {
+            ViewBag.Managers = uof.AppUserRepo.GetAllManagers();
             if (id == 0 || id == null) return PartialView(new WareHouse());
             else
             {
@@ -61,6 +62,8 @@ namespace InventoryManagementSystem.Controllers
         [HttpPost]
         public IActionResult UpSert(WareHouse ware)
         {
+            ViewBag.Managers = uof.AppUserRepo.GetAllManagers();
+
             try
             {
                 if (!ModelState.IsValid)
