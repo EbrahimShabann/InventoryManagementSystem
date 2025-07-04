@@ -16,7 +16,7 @@ namespace InventoryManagementSystem.Controllers
             this.uof = uof;
         }
 
-        public IActionResult Index(string searchText, int? categoryId, int? supplierId, int page = 1, int pageSize = 9)
+        public IActionResult Index(string searchText, int? categoryId, int? supplierId, int page = 1, int pageSize = 20)
         {
             var products = IproductRepo.GetAll().AsQueryable();
 
@@ -51,6 +51,20 @@ namespace InventoryManagementSystem.Controllers
             ViewBag.SupplierId = supplierId;
 
             return View("Index", pagedProducts);
+        }
+
+        public IActionResult Details(int id)
+        {
+            var prd = IproductRepo.GetById(id);
+            if (prd == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.Categoriey = uof.categoryRepo.GetAll();
+            ViewBag.Supplier = uof.supplierRepo.GetAll();
+
+            return View("Details", prd);
         }
         public IActionResult New()
         {
