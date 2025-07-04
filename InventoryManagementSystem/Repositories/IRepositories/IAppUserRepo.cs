@@ -1,4 +1,5 @@
 ﻿using InventoryManagementSystem.Models;
+using System.Security.Claims;
 
 namespace InventoryManagementSystem.Repositories.IRepositories
 {
@@ -10,5 +11,7 @@ namespace InventoryManagementSystem.Repositories.IRepositories
         void GetAllUsersRoles();
         string GetRoleName(string roleId);
         List<ApplicationUser> GetAllManagers();
+        List<ApplicationUser> sort(string sortparam);
+
     }
 }

@@ -11,29 +11,33 @@
 @* upsert modal *@
 <partial name="_UpSertModalPartial" />
 
+@if (User.IsInRole(StaticDetails.Admin_Role))
+{
 
-@section asideNav {
-  
-    <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link UpSert-btn" href="#" data-id="0">
+    @section asideNav {
 
-                    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="ni ni-key-25 text-dark text-sm opacity-10"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Add WareHouse</span>
-                </a>
-            </li>
-           
-            
+        <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link UpSert-btn" href="#" data-id="0">
 
-        </ul>
-    </div>
-   
+                        <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="ni ni-key-25 text-dark text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Add WareHouse</span>
+                    </a>
+                </li>
+
+
+
+            </ul>
+        </div>
+
     }
 
+}
 @* warehouses table *@
+
 <div class="row">
     <div class="col-12">
         <div class="card mb-4">

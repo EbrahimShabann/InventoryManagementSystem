@@ -1,27 +1,30 @@
 ﻿using InventoryManagementSystem.Models;
 using InventoryManagementSystem.Repositories.IRepositories;
 using InventoryManagementSystem.Services.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace InventoryManagementSystem.Repositories
 {
     public class UnitOfwork : IUnitOfWork
     {
         private readonly AppDbContext db;
+        private readonly UserManager<ApplicationUser> userManager;
         IWareHouseRepo _wareHouseRepo;
         IInventoryItemRepo _inventoryItemRepo;
         ISupplierRepo _supplierRepo;
         IAppUserRepo userRepo;
         ICategoryRepo _categoryRepo;
-        public UnitOfwork(AppDbContext db)
+        public UnitOfwork(AppDbContext db,UserManager<ApplicationUser> userManager)
         {
             this.db = db;
+            this.userManager = userManager;
         }
         public IWareHouseRepo warehouseRepo
         {
             get
             {
                 if (_wareHouseRepo != null) return _wareHouseRepo;
-                _wareHouseRepo = new WareHouseRepository(db);
+                _wareHouseRepo = new WareHouseRepository(db,userManager);
                 return _wareHouseRepo;
             }
         }

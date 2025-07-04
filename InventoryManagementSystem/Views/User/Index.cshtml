@@ -38,68 +38,7 @@
             <div class="card-body px-0 pt-0 pb-2">
                 <div id="injectTable" class="table-responsive p-0">
                    
-                <table class="table align-items-center mb-0">
-                        <thead>
-                            <tr>
-                              
-                                <th class="text-center">
-                                    Name
-                                </th>
-                                <th class="text-center">
-                                    Email
-                                </th>
-                                <th class="text-center">
-                                    Phone
-                                </th>
-                                <th class="text-center">
-                                    Address
-                                </th>
-
-                                <th class="text-center">
-                                    Role
-                                </th>
-
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody">
-                            @foreach (var item in Model.Items)
-                            {
-                                  <tr>
-                                   
-                                  
-                                    <td class="align-middle text-center text-sm">
-                                        <span class="text-secondary text-xs font-weight-bold">@item.UserName</span>
-                                    </td>
-                                   <td class="align-middle text-center text-sm">
-                                        <span class="text-secondary text-xs font-weight-bold">@item.Email</span>
-                                    </td>
-                                   <td class="align-middle text-center text-sm">
-                                        <span class="text-secondary text-xs font-weight-bold">@item.PhoneNumber</span>
-                                    </td>
-                                   <td class="align-middle text-center text-sm">
-                                        <span class="text-secondary text-xs font-weight-bold">@item.Address</span>
-                                    </td>
-                                   <td class="align-middle text-center text-sm">
-                                        <span class="text-secondary text-xs font-weight-bold">@item.Role</span>
-                                    </td>
-                                  
-                                    <td class="align-middle btn btn-primary ms-1">
-                                        <a href="/User/Details?Id=@item.Id" class=" text-secondary font-weight-bold text-xs page-link" >Details</a>
-                                    </td>
-                                  
-                                    <td class="align-middle btn btn-dark ms-1">
-                                        <a class="UpSert-btn text-secondary font-weight-bold text-xs page-link" data-id="@item.Id">Edit</a>
-                                    </td>
-                                    <td class="align-middle btn btn-danger">
-                                        <button class="delete-btn text-secondary font-weight-bold text-xs page-link" data-id="@item.Id">Delete</button>
-                                    </td>
-                                
-                                </tr>
-                                
-                            }
-                        </tbody>
-                    </table>
-
+                   <partial name="sortTable"/>
                 </div>
             </div>
         </div>
@@ -152,7 +91,7 @@
 
     //ajax
 
-    //UpSert warehouse
+    //UpSert user
     $(".UpSert-btn").click(function(){
         const id = $(this).data('id')
         $("#modalBody").load(`/User/UpSert?id=${id}`,function(response,status,xhr){
@@ -167,15 +106,15 @@
     })
 
 
-    //sort warehouses
+    //sort user
 
          $(document).on('click', '.sort', function(e){
         e.preventDefault();
-        // const sortOrder = $(this).data('sortorder');
-        console.log(sortOrder);
+        const sortOrder = $(this).data('sortorder');
+      
 
         $.ajax({
-            url: `/WareHouse/sortTable?sortOrder=${sortOrder}`,
+            url: `/User/sortTable?sortOrder=${sortOrder}`,
             success: function(result){
                 $("#injectTable").html(result);
             },

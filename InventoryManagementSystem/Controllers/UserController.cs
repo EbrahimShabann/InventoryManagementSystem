@@ -10,9 +10,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InventoryManagementSystem.Controllers
 {
-	//[Area("Admin")]
-	//[Authorize(Roles = StaticDetails.Admin_Role)]
-	public class UserController : Controller
+	[Authorize(Roles = StaticDetails.Admin_Role)]
+    public class UserController : Controller
 	{
         private readonly AppDbContext db;
 
@@ -27,17 +26,28 @@ namespace InventoryManagementSystem.Controllers
         }
         public IActionResult Index(int page=1, int size=10)
 		{
-           var UsersList =db.ApplicationUsers.ToList();
-            foreach (var user in UsersList)
-            {
-				string userRole = uof.AppUserRepo.GetRoleOfUser(user.Id);
-				user.Role = userRole;
-            }
+
+           var UsersList =uof.AppUserRepo.sort("");
+            
             var paged = UsersList.ToPagedResult(page, size);
           
             return View(paged);
         }
-		public IActionResult UpSert(string id)
+        public IActionResult sortTable(string sortOrder, int page = 1, int size = 10)
+        {
+            ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["emailSortParam"] = sortOrder == "email" ? "email_desc" : "email";
+            ViewData["phoneSortParam"] = sortOrder == "phone" ? "phone_desc" : "phone";
+            ViewData["addressSortParam"] = sortOrder == "address" ? "address_desc" : "address";
+            ViewData["roleSortParam"] = sortOrder == "role" ? "role_desc" : "role";
+
+            var users = uof.AppUserRepo.sort(sortOrder).AsEnumerable();
+            ViewBag.sortOrder = sortOrder;
+            var pagedResult = users.ToPagedResult(page, size);
+            return PartialView("sortTable", pagedResult);
+
+        }
+        public IActionResult UpSert(string id)
 		{
 			UserVM userVM;
 
@@ -79,6 +89,7 @@ namespace InventoryManagementSystem.Controllers
               
 	    }
 		[HttpPost]
+        [ValidateAntiForgeryToken]
 		public async Task<IActionResult> UpSert(UserVM userVM,IFormFile file)
 		{
             try
