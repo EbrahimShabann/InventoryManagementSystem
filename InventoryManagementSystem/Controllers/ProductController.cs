@@ -16,23 +16,56 @@ namespace InventoryManagementSystem.Controllers
             this.uof = uof;
         }
 
-        public IActionResult Index(int page = 1, int pageSize = 9)
+        public IActionResult Index(string searchText, int? categoryId, int? supplierId, int page = 1, int pageSize = 20)
         {
-            var allProducts = IproductRepo.GetAll().ToList();
-            ViewBag.Categoriey = uof.categoryRepo.GetAll();
-            ViewBag.Supplier = uof.supplierRepo.GetAll();
+            var products = IproductRepo.GetAll().AsQueryable();
 
-            var pagedProducts = allProducts
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                products = products.Where(p => p.Name.Contains(searchText) || p.Description.Contains(searchText));
+            }
+
+            if (categoryId.HasValue)
+            {
+                products = products.Where(p => p.CategoryId == categoryId);
+            }
+
+            if (supplierId.HasValue)
+            {
+                products = products.Where(p => p.SupplierId == supplierId);
+            }
+
+            var pagedProducts = products
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
 
-            ViewBag.TotalPages = (int)Math.Ceiling(allProducts.Count / (double)pageSize);
+            ViewBag.TotalPages = (int)Math.Ceiling(products.Count() / (double)pageSize);
             ViewBag.CurrentPage = page;
+
+            ViewBag.Categoriey = uof.categoryRepo.GetAll();
+            ViewBag.Supplier = uof.supplierRepo.GetAll();
+
+            ViewBag.SearchText = searchText;
+            ViewBag.CategoryId = categoryId;
+            ViewBag.SupplierId = supplierId;
 
             return View("Index", pagedProducts);
         }
 
+        public IActionResult Details(int id)
+        {
+            var prd = IproductRepo.GetById(id);
+            if (prd == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.Categoriey = uof.categoryRepo.GetAll();
+            ViewBag.Supplier = uof.supplierRepo.GetAll();
+
+            return View("Details", prd);
+        }
         public IActionResult New()
         {
             ViewBag.Categoriey = uof.categoryRepo.GetAll();

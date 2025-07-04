@@ -1,0 +1,63 @@
+﻿@model Product
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <img src="~/images/Products/@Model.Image" class="card-img-top" alt="@Model.Name" style="height: 250px; object-fit: cover;" />
+
+                <div class="card-body">
+                    <h4 class="card-title mb-3">@Model.Name</h4>
+                    <p class="card-text">
+                        <strong>ID:</strong> @Model.ProductId<br />
+                        <strong>Description:</strong> @Model.Description<br />
+                        <strong>Price:</strong> @Model.Price<br />
+                        <strong>Reorder Level:</strong> @Model.ReorderLevel<br />
+                        <strong>Stock:</strong> @Model.TotalStocQuantity<br />
+
+                        <strong>Category:</strong>
+                        @{
+                            var category = ((IEnumerable<Category>)ViewBag.Categoriey)
+                            .FirstOrDefault(c => c.CategoryId == Model.CategoryId);
+                        }
+                        @(category != null ? category.Name : "N/A")<br />
+
+                        <strong>Supplier:</strong>
+                        @{
+                            var supplier = ((IEnumerable<Supplier>)ViewBag.Supplier)
+                            .FirstOrDefault(s => s.SupplierId == Model.SupplierId);
+                        }
+                        @(supplier != null ? supplier.Name : "N/A")<br />
+                    </p>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="/Product/Edit/@Model.ProductId" class="btn btn-warning btn-sm">Edit</a>
+                        <button onclick="confirmDelete(@Model.ProductId)" class="btn btn-danger btn-sm">Delete</button>
+                        <a href="/Product/Index" class="btn btn-secondary btn-sm">Back</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function confirmDelete(productId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This product will be permanently deleted!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '/Product/Delete/' + productId;
+            }
+        });
+    }
+</script>
