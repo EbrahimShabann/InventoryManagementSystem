@@ -1,0 +1,82 @@
+﻿ @model PagedResult<ApplicationUser>
+
+ 
+                <table class="table align-items-center mb-0">
+                        <thead>
+                            <tr>
+                                <th class="text-center">
+                                   <a class="sort" href="#"  data-sortorder="@ViewData["NameSortParam"]"> 
+                                        Name @(ViewBag.sortOrder== "name_desc" ? "↓" :ViewBag.sortOrder == null ? "↑" : "")
+                                    </a>
+                                </th>
+                                <th class="text-center">
+                                 <a class="sort" href="#"  data-sortorder="@ViewData["emailSortParam"]">
+                                     Email @(ViewBag.sortOrder== "email_desc" ? "↓" :ViewBag.sortOrder == "email" ? "↑" : "")
+                                 </a>
+                                </th>
+                                <th class="text-center">
+                                    <a class="sort" href="#"  data-sortorder="@ViewData["phoneSortParam"]">
+                                        Phone@(ViewBag.sortOrder== "phone_desc" ? "↓" :ViewBag.sortOrder == "phone" ? "↑" : "")
+                                     </a>
+                                </th >
+                                
+                               <th class="text-center">
+                                   <a class="sort" href="#"  data-sortorder="@ViewData["addressSortParam"]">
+                                       Address @(ViewBag.sortOrder== "address_desc" ? "↓" :ViewBag.sortOrder == "address" ? "↑" : "")
+                                   </a>
+                                </th>
+                               <th class="text-center">
+                                   <a class="sort" href="#"  data-sortorder="@ViewData["roleSortParam"]">
+                                       Role @(ViewBag.sortOrder== "role_desc" ? "↓" :ViewBag.sortOrder == "role" ? "↑" : "")
+                                   </a>
+                                </th>
+                               
+                               
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr>
+
+
+                                    <td class="align-middle text-center text-sm">
+                                        <span class="text-secondary text-xs font-weight-bold">@item.UserName</span>
+                                    </td>
+                                    <td class="align-middle text-center text-sm">
+                                        <span class="text-secondary text-xs font-weight-bold">@item.Email</span>
+                                    </td>
+                                    <td class="align-middle text-center text-sm">
+                                        <span class="text-secondary text-xs font-weight-bold">@item.PhoneNumber</span>
+                                    </td>
+                                    <td class="align-middle text-center text-sm">
+                                        <span class="text-secondary text-xs font-weight-bold">@item.Address</span>
+                                    </td>
+                                    <td class="align-middle text-center text-sm">
+                                        <span class="text-secondary text-xs font-weight-bold">@item.Role</span>
+                                    </td>
+
+                                    <td class="align-middle btn btn-primary ms-1">
+                                        <a href="/User/Details?Id=@item.Id" class=" text-secondary font-weight-bold text-xs page-link">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </a>
+                                    </td>
+
+                                    <td class="align-middle btn btn-dark ms-1">
+                                        <a class="UpSert-btn text-secondary font-weight-bold text-xs page-link" data-id="@item.Id">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </a>
+                                    </td>
+                                    <td class="align-middle btn btn-danger">
+                                        <button class="delete-btn text-secondary font-weight-bold text-xs page-link" data-id="@item.Id">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </td>
+
+                                </tr>
+
+                            }
+                        </tbody>
+
+                    </table>

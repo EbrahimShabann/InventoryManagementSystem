@@ -62,14 +62,22 @@
                                 </span>
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" asp-controller="WareHouse" asp-action="Index">WareHouses</a></li>
+                                @if (User.IsInRole(StaticDetails.Admin_Role) || User.IsInRole(StaticDetails.Manager_Role))
+                                {
+                                    <li><a class="dropdown-item" asp-controller="WareHouse" asp-action="Index">WareHouses</a></li>
 
-                                <li><a class="dropdown-item" asp-controller="User" asp-action="Index">Users</a></li>
+                                }
+                                @if (User.IsInRole(StaticDetails.Admin_Role))
+                                {
+                                    <li><a class="dropdown-item" asp-controller="User" asp-action="Index">Users</a></li>
+
+                                }
 
                                 <li><a class="dropdown-item" asp-controller="Product" asp-action="Index">Product</a></li>
 
                                 <li><a class="dropdown-item" asp-controller="Transaction" asp-action="GetAllTransactions">Transaction</a></li>
                                 <li><a class="dropdown-item" asp-controller="Category" asp-action="Index">Category</a></li>
+                                <li><a class="dropdown-item" asp-controller="InventoryItem" asp-action="Index">InventoryItems</a></li>
                             </ul>
                         </li>
 
@@ -192,7 +200,9 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="../assets/js/argon-dashboard.min.js?v=2.1.0"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 

@@ -32,10 +32,14 @@ namespace InventoryManagementSystem.Models
 
         public virtual List<InventoryItem> InventoryItems { get; set; }
 
+        [Required(ErrorMessage = "Please select a manager")]
         public string ApplicationUserId { get; set; }
 
         [ForeignKey("ApplicationUserId")]
         public virtual ApplicationUser Manager { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateOnly CreatedAt { get; set; }
 
     }
 }

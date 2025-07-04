@@ -1,12 +1,15 @@
 ﻿using InventoryManagementSystem.Models;
 using InventoryManagementSystem.Repositories.IRepositories;
 using InventoryManagementSystem.Services.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using System.Drawing;
+using System.Security.Claims;
 
 namespace InventoryManagementSystem.Controllers
 {
+    [Authorize(Roles =StaticDetails.Admin_Role +","+StaticDetails.Manager_Role)]
     public class WareHouseController : Controller
     {
         private readonly IUnitOfWork uof;
@@ -21,7 +24,8 @@ namespace InventoryManagementSystem.Controllers
 
         public IActionResult Index(int page = 1, int size = 10)
         {
-            var wareHouses = uof.warehouseRepo.sort(""); // Default sort by ID
+           
+            var wareHouses = uof.warehouseRepo.sort("",User); // Default sort by ID
             var pagedResult = wareHouses.ToPagedResult(page, size);
             return View(pagedResult);
         }
@@ -32,8 +36,10 @@ namespace InventoryManagementSystem.Controllers
             ViewData["NameSortParam"] = sortOrder == "name" ? "name_desc" : "name";
             ViewData["locationSortParam"] = sortOrder == "loca" ? "loca_desc" : "loca";
             ViewData["phoneSortParam"] = sortOrder == "phone" ? "phone_desc" : "phone";
+            ViewData["productsSortParam"] = sortOrder == "products" ? "products_desc" : "products";
+            ViewData["dateSortParam"] = sortOrder == "date" ? "date_desc" : "date";
 
-            var wareHouses = uof.warehouseRepo.sort(sortOrder).AsEnumerable();
+            var wareHouses = uof.warehouseRepo.sort(sortOrder,User).AsEnumerable();
             ViewBag.sortOrder = sortOrder;
             var pagedResult = wareHouses.ToPagedResult(page, size);
             return PartialView("sortTable", pagedResult);
@@ -41,12 +47,46 @@ namespace InventoryManagementSystem.Controllers
         }
         public IActionResult Details(int WareHouseId)
         {
-            if (WareHouseId == 0) return View("Error");
+            if (WareHouseId == 0)
+                return View("Error");
+
             var ware = uof.warehouseRepo.GetById(WareHouseId);
+
+            if (ware == null)
+                return View("Error");
+
+            // Use a list to store all warnings and show them together
+            List<string> lowStockWarnings = new();
+            List<string> EmptyStockWarnings = new();
+
+            foreach (var item in ware.InventoryItems)
+            {
+                if (item?.Quantity== 0)
+                {
+                    TempData["error"]=($" Product: {item.Product.Name} stock is empty!");
+                }
+                else if (item?.Quantity<= 5)
+                {
+                    TempData["warning"] = ($" Product: {item.Product.Name} is about to run out!");
+                }
+            }
+
+            //if (lowStockWarnings.Any())
+            //{
+            //    TempData["warning"] = string.Join("<br/>", lowStockWarnings);
+            //}
+            //else if (EmptyStockWarnings.Any())
+            //{
+            //    TempData["error"] = string.Join("<br/>", EmptyStockWarnings);
+
+            //}
+
             return View(ware);
         }
 
+
         [HttpGet]
+        [Authorize(Roles =StaticDetails.Admin_Role)]
         public IActionResult UpSert(int? id)
         {
             ViewBag.Managers = uof.AppUserRepo.GetAllManagers();
@@ -60,6 +100,9 @@ namespace InventoryManagementSystem.Controllers
 
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = StaticDetails.Admin_Role)]
+
         public IActionResult UpSert(WareHouse ware)
         {
             ViewBag.Managers = uof.AppUserRepo.GetAllManagers();
@@ -68,6 +111,7 @@ namespace InventoryManagementSystem.Controllers
             {
                 if (!ModelState.IsValid)
                 {
+
                     return PartialView(ware);
                 }
                 else
@@ -88,11 +132,13 @@ namespace InventoryManagementSystem.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("Ex", ex.Message);
+                ModelState.AddModelError("Ex", ex.InnerException.Message);
                 return PartialView(ware);
             }
         }
 
+
+        [Authorize(Roles = StaticDetails.Admin_Role)]
         public IActionResult Delete(int id)
         {
             if (id != 0)

@@ -2,6 +2,7 @@
 using InventoryManagementSystem.Repositories.IRepositories;
 using InventoryManagementSystem.Services.Data;
 using System.Runtime.Intrinsics.Arm;
+using System.Security.Claims;
 
 namespace InventoryManagementSystem.Repositories
 {
@@ -84,6 +85,32 @@ namespace InventoryManagementSystem.Repositories
 
             return managers;
 
+        }
+
+        public List<ApplicationUser> sort(string sortOrder)
+        {
+            var users = GetAll().AsQueryable();
+            foreach (var user in users)
+            {
+                string userRole = GetRoleOfUser(user.Id);
+                user.Role = userRole;
+            }
+
+            users = sortOrder switch
+            {
+               
+                "name_desc" => users.OrderByDescending(u => u.UserName),
+                "email" => users.OrderBy(u => u.Email),
+                "email_desc" => users.OrderByDescending(u => u.Email),
+                "phone" => users.OrderBy(u => u.PhoneNumber),
+                "phone_desc" => users.OrderByDescending(u => u.PhoneNumber),
+                "address" => users.OrderBy(u => u.Address),
+                "address_desc" => users.OrderByDescending(u => u.Address),
+                "role" => users.OrderBy(u => u.Role),
+                "role_desc" => users.OrderByDescending(u => u.Role),
+                _ => users.OrderBy(u => u.UserName),
+            };
+            return users.ToList();
         }
     }
 }

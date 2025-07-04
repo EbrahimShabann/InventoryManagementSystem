@@ -6,12 +6,12 @@
                             <tr>
                                 <th class="text-center">
                                    <a class="sort" href="#"  data-sortorder="@ViewData["IdSortParam"]"> 
-                                       WareHouse Id @(ViewBag.sortOrder== "id_desc" ? "↓" :ViewBag.sortOrder == null ? "↑" : "")
+                                        Id @(ViewBag.sortOrder== "id_desc" ? "↓" :ViewBag.sortOrder == null ? "↑" : "")
                                     </a>
                                 </th>
                                 <th class="text-center">
                                  <a class="sort" href="#"  data-sortorder="@ViewData["NameSortParam"]">
-                                     WareHouse Name@(ViewBag.sortOrder== "name_desc" ? "↓" :ViewBag.sortOrder == "name" ? "↑" : "")
+                                     WareHouse @(ViewBag.sortOrder== "name_desc" ? "↓" :ViewBag.sortOrder == "name" ? "↑" : "")
                                  </a>
                                 </th>
                                 <th class="text-center">
@@ -24,13 +24,23 @@
                                        PhoneNumber@(ViewBag.sortOrder== "phone_desc" ? "↓" :ViewBag.sortOrder == "phone" ? "↑" : "")
                                    </a>
                                 </th>
+                               <th class="text-center">
+                                   <a class="sort" href="#"  data-sortorder="@ViewData["productsSortParam"]">
+                                       Total Products @(ViewBag.sortOrder== "products_desc" ? "↓" :ViewBag.sortOrder == "products" ? "↑" : "")
+                                   </a>
+                                </th>
+                               <th class="text-center">
+                                   <a class="sort" href="#"  data-sortorder="@ViewData["dateSortParam"]">
+                                       CreatedAt @(ViewBag.sortOrder== "date_desc" ? "↓" :ViewBag.sortOrder == "date" ? "↑" : "")
+                                   </a>
+                                </th>
                                 <th class="text-center">
                                    <a class="sort" href="#"  data-sortorder="@ViewData["phoneSortParam"]">
                                        Manager@(ViewBag.sortOrder== "phone_desc" ? "↓" :ViewBag.sortOrder == "phone" ? "↑" : "")
                                    </a>
                                 </th>
                                 <th class="text-center">
-                                    IsActive
+                                    Status
                                 </th>
                                 <th></th>
                             </tr>
@@ -53,31 +63,46 @@
                                         <span class="text-secondary text-xs font-weight-bold">@item.PhoneNumber</span>
                                     </td>
                                    <td class="align-middle text-center text-sm">
+                                        <span class="text-secondary text-xs font-weight-bold">@item.InventoryItems.Count</span>
+                                    </td>
+                                   <td class="align-middle text-center text-sm">
+                                        <span class="text-secondary text-xs font-weight-bold">@item.CreatedAt.ToString("dd  MMMM  yyyy")</span>
+                                    </td>
+                                   <td class="align-middle text-center text-sm">
                                         <span class="text-secondary text-xs font-weight-bold">@item.Manager?.UserName</span>
                                     </td>
                                    <td class="align-middle text-center text-sm">
                                         @if (item.IsActive == true)
                                         {
-                                            <span class="badge badge-sm " style="background-color:green">@item.IsActive</span>
+                                            <span class="badge badge-sm " style="background-color:green">Active</span>
 
                                         }
                                         else
                                         {
-                                             <span class="badge badge-sm " style="background-color:red">@item.IsActive</span>
+                                             <span class="badge badge-sm " style="background-color:red">InActive</span>
 
                                         }
                                     </td>
                                   
                                     <td class="align-middle btn btn-primary ms-1">
-                                        <a href="/WareHouse/Details?WareHouseId=@item.WareHouseId" class=" text-secondary font-weight-bold text-xs page-link" >Details</a>
+                                        <a href="/WareHouse/Details?WareHouseId=@item.WareHouseId" class=" text-secondary font-weight-bold text-xs page-link" >
+                                             <i class="fa-solid fa-eye"></i>
+                                        </a>
                                     </td>
-                                  
-                                    <td class="align-middle btn btn-dark ms-1">
-                                        <a class="UpSert-btn text-secondary font-weight-bold text-xs page-link" data-id="@item.WareHouseId">Edit</a>
-                                    </td>
-                                    <td class="align-middle btn btn-danger">
-                                        <button class="delete-btn text-secondary font-weight-bold text-xs page-link" data-id="@item.WareHouseId">Delete</button>
-                                    </td>
+                                    @if (User.IsInRole(StaticDetails.Admin_Role))
+                                    {
+                                             <td class="align-middle btn btn-dark ms-1">
+                                                      <a class="UpSert-btn text-secondary font-weight-bold text-xs page-link" data-id="@item.WareHouseId">
+                                                          <i class="fa-solid fa-pen-to-square"></i>
+                                                      </a>
+                                             </td>
+                                             <td class="align-middle btn btn-danger">
+                                                       <button class="delete-btn text-secondary font-weight-bold text-xs page-link" data-id="@item.WareHouseId">
+                                                           <i class="fa-solid fa-trash"></i>
+                                                       </button>
+                                             </td>
+                                    }
+               
                                 
                                 </tr>
                                 
