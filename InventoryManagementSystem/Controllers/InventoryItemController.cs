@@ -1,15 +1,21 @@
-﻿using InventoryManagementSystem.Repositories.IRepositories;
-using Microsoft.AspNetCore.Mvc;
+﻿using InventoryManagementSystem.Models;
+using InventoryManagementSystem.Repositories;
+using InventoryManagementSystem.Repositories.IRepositories;
 using InventoryManagementSystem.Services.Data;
-using InventoryManagementSystem.Models;
+using InventoryManagementSystem.ViewModels;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace InventoryManagementSystem.Controllers
 {
     public class InventoryItemController : Controller
     {
+        IproductRepo productRepo;
+
         private readonly IUnitOfWork uof;
-        public InventoryItemController(IUnitOfWork uof)
+        public InventoryItemController(IproductRepo repoProduct, IUnitOfWork uof)
         {
+            productRepo = repoProduct;
             this.uof = uof;
         }
         public IActionResult Index(string sortOrder, int page = 1, int size = 10)
@@ -24,13 +30,26 @@ namespace InventoryManagementSystem.Controllers
         }
         public IActionResult UpSert(int? id)
         {
-            if (id == 0 || id == null) return PartialView(new InventoryItem());
-            else
+            var products = productRepo.GetAll()
+                .Select(p => new SelectListItem { Value = p.ProductId.ToString(), Text = p.Name });
+
+            var warehouses = uof.warehouseRepo.GetAll()
+                .Select(w => new SelectListItem { Value = w.WareHouseId.ToString(), Text = w.Name });
+
+            InventoryItem item = id == null || id == 0
+                ? new InventoryItem { LastUpdated = DateTime.Now }
+                : uof.inventoryItemRepo.GetById(id);
+
+            var viewModel = new InventoryItemFormViewModel
             {
-                var inventoryItemFromDb = uof.inventoryItemRepo.GetById(id);
-                return PartialView(inventoryItemFromDb);
-            }
+                InventoryItem = item,
+                Products = products,
+                WareHouses = warehouses
+            };
+
+            return View(viewModel);
         }
+
         [HttpPost]
         public IActionResult UpSert(InventoryItem inventoryItem)
         {
