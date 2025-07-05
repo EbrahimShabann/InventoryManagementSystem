@@ -159,10 +159,10 @@ namespace InventoryManagementSystem.Controllers
                     else
                     {
                         //user existed and try to update it
-                        userFromDb.UserName=userVM.UserName;
+
+                        userFromDb.UserName = userVM.UserName;
                         userFromDb.Email = userVM.Email;
                         userFromDb.PhoneNumber = userVM.PhoneNumber;
-                        userFromDb.Address = userVM.ApplicationUser.Address;
 
                         string oldRole = uof.AppUserRepo.GetRoleOfUser(userVM.ApplicationUser.Id);
                         string newRole = uof.AppUserRepo.GetRoleName(userVM.ApplicationUser.Role);
@@ -183,7 +183,7 @@ namespace InventoryManagementSystem.Controllers
                             userFromDb.Image = userVM.ApplicationUser.Image;
 
                         }
-                        var updatedResult=await _userManager.UpdateAsync(userVM.ApplicationUser);
+                        var updatedResult=await _userManager.UpdateAsync(userFromDb);
                         if (!updatedResult.Succeeded)
                         
                         {
