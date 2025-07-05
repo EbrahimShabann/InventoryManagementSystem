@@ -1,8 +1,71 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@using InventoryManagementSystem.ViewModels
+@model homeViewModel
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row">
+    <div class="col-md-3">
+        <div class="card bg-light">
+            <div class="card-body text-center">
+                <h5> <i class="fa-solid fa-warehouse"></i>  WareHouses</h5>
+                <h3>@Model.warehousesNum</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-light">
+            <div class="card-body text-center">
+                <h5> <i class="fa-solid fa-layer-group"></i>  Categories</h5>
+                <h3>@Model.categoriesNum</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-light">
+            <div class="card-body text-center">
+                <h5><i class="fa-solid fa-cubes"></i>  Products</h5>
+                <h3>@Model.productsNum</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-light">
+            <div class="card-body text-center">
+                <h5><i class="fa-solid fa-person"></i>  Suppliers</h5>
+                <h3>@Model.suppliersNum</h3>
+            </div>
+        </div>
+    </div>
+   
+</div>
+
+
+
+<div class="card shadow-sm rounded-3 mt-5">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="mb-0 text-danger fw-semibold">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                Low Stock Products
+            </h6>
+            <a href="/product/index" class="text-primary small text-decoration-none">View All</a>
+        </div>
+
+        <!-- Product List Item -->
+        @foreach (var item in Model.LowStockProducts)
+        {
+            <div class="d-flex align-items-center mb-3">
+                <img src="~/images/@item.Image" class="rounded me-3" width="45" height="45" alt="Dell XPS 13">
+                <div class="flex-grow-1">
+                    <div class="fw-semibold">@item.Name</div>
+                    <small class="text-muted">ID : @item.ProductId</small>
+                </div>
+                <div class="text-end">
+                    <div class="text-success small">Instock</div>
+                    <div class="fw-bold text-danger">@item.TotalStocQuantity</div>
+                </div>
+            </div>
+
+        }
+       
+
+    </div>
 </div>
