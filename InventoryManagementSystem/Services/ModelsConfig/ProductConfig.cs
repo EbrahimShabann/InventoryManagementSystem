@@ -8,11 +8,9 @@ namespace InventoryManagementSystem.Services.ModelsConfig
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
-            //builder.HasIndex(p => p.SKU).IsUnique();
             builder.Property(p => p.ReorderLevel).HasDefaultValueSql("0");
             builder.Property(p => p.TotalStocQuantity).HasDefaultValueSql("0");
 
-            
         }
     }
 }

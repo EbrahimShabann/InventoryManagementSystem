@@ -6,11 +6,11 @@ namespace InventoryManagementSystem.Services.ModelsConfig
 {
     public class SupplierConfig : IEntityTypeConfiguration<Supplier>
     {
-     
-            public void Configure(EntityTypeBuilder<Supplier> builder)
-            {
-                builder.HasIndex(s => s.Name).IsUnique();
-            }
-        
+
+        public void Configure(EntityTypeBuilder<Supplier> builder)
+        {
+            builder.HasIndex(s => s.Name).IsUnique();
+        }
+
     }
 }
