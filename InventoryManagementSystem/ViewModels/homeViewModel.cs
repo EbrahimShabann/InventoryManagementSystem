@@ -11,5 +11,6 @@ namespace InventoryManagementSystem.ViewModels
         public int productsNum { get; set; }
         public int suppliersNum { get; set; }
         public IEnumerable<Product> LowStockProducts { get; set; }
+        public IEnumerable<Supplier> Suppliers { get; set; }
     }
 }

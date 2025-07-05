@@ -22,15 +22,19 @@ namespace InventoryManagementSystem.Controllers
 
         public IActionResult Index()
         {
-            var homeVM = new homeViewModel
-            {
-                warehousesNum = uof.warehouseRepo.GetAll().Count,
-                categoriesNum = uof.categoryRepo.GetAll().Count,
-                productsNum = productRepo.GetAll().Count,
-                suppliersNum = uof.supplierRepo.GetAll().Count,
-                LowStockProducts=productRepo.GetAll().Where(p=>p.TotalStocQuantity<=5),
-            }; 
-            return View(homeVM);
+            
+                var homeVM = new homeViewModel
+                {
+                    warehousesNum = uof.warehouseRepo.GetAll().Count,
+                    categoriesNum = uof.categoryRepo.GetAll().Count,
+                    productsNum = productRepo.GetAll().Count,
+                    suppliersNum = uof.supplierRepo.GetAll().Count,
+                    LowStockProducts = productRepo.GetAll().Where(p => p.TotalStocQuantity <= 5),
+                    Suppliers= uof.supplierRepo.GetAll(),
+                };
+                return View(homeVM);
+          
+          
         }
 
         public IActionResult Privacy()

@@ -33,6 +33,21 @@ namespace InventoryManagementSystem.Controllers
           
             return View(paged);
         }
+        public IActionResult search(string searchText, int page = 1, int size = 10)
+        {
+            var users = uof.AppUserRepo.sort("");
+            dynamic pagedResult;
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                users = users.Where(w => w.UserName.Contains(searchText) || w.Address.Contains(searchText)).ToList();
+                pagedResult = users.ToPagedResult(page, size);
+                return PartialView("sortTable", pagedResult);
+            }
+            pagedResult = users.ToPagedResult(page, size);
+            return PartialView("sortTable", pagedResult);
+
+
+        }
         public IActionResult sortTable(string sortOrder, int page = 1, int size = 10)
         {
             ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";

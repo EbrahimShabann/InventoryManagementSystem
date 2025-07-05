@@ -1,9 +1,11 @@
 ﻿using InventoryManagementSystem.Models;
 using InventoryManagementSystem.Repositories.IRepositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryManagementSystem.Controllers
 {
+    [Authorize]
     public class ProductController : Controller
     {
         IproductRepo IproductRepo;
