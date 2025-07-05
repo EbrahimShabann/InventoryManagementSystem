@@ -7,6 +7,13 @@
 
 
 
+        <div class="col-12 col-md-3 mb-3">
+            <input type="text" name="searchText" class="form-control form-control-sm"
+               id="searchText" placeholder="Search by name" oninput="search(this)" />
+        </div>
+       
+
+
 
 @* upsert modal *@
 <partial name="_UpSertModalPartial" />
@@ -85,8 +92,9 @@
                    });
                  });
 
-                
-       
+
+              
+
     });//end of load
 
     //ajax
@@ -119,7 +127,24 @@
     });
 
 
-   
+      //search
+                function search(input){
+                    var searchtext = $(input).val();
+                    console.log(searchtext);
+
+                    $.ajax({
+                        url:`/WareHouse/search?searchText=${searchtext}`,
+                        success: function(result){
+                            $("#injectTable").html(result);
+                        },
+                        error: function () {
+                            alert("Failed to serach.");
+                        }
+                    })
+                }
+
+
+
 </script>
 
 <partial name="_PaginationControls" />
