@@ -7,9 +7,9 @@ namespace InventoryManagementSystem.Models
     [Table("Supplier")]
     public class Supplier
     {
-
-      
         public int SupplierId { get; set; }
+
+
 
         [Required]
         [Remote("CheckUniqueness", "AttributesConstraints")]
@@ -23,13 +23,13 @@ namespace InventoryManagementSystem.Models
 
 
 
-        [DataType(DataType.PhoneNumber,ErrorMessage ="InValid Phone Number")]
+        [DataType(DataType.PhoneNumber, ErrorMessage = "InValid Phone Number")]
         [MaxLength(20, ErrorMessage = "Phone Max Length is 20 Chars")]
         public string Phone { get; set; }
 
 
 
-        [DataType(DataType.EmailAddress,ErrorMessage ="InValid Email")]
+        [DataType(DataType.EmailAddress, ErrorMessage = "InValid Email")]
         public string Email { get; set; }
 
 

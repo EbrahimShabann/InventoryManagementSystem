@@ -11,7 +11,6 @@ namespace InventoryManagementSystem.Services.ModelsConfig
             builder.Property(i => i.Quantity).HasDefaultValueSql("0");
             builder.Property(i => i.LastUpdated).HasDefaultValueSql("GETDATE()");
 
-
         }
     }
 }

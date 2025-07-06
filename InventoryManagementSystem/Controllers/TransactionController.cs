@@ -1,12 +1,14 @@
 ﻿using InventoryManagementSystem.Models;
 using InventoryManagementSystem.Repositories.IRepositories;
 using InventoryManagementSystem.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Controller = Microsoft.AspNetCore.Mvc.Controller;
 
 namespace InventoryManagementSystem.Controllers
 {
+    [Authorize]
     public class TransactionController : Controller
     {
 

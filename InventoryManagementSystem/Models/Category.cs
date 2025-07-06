@@ -7,14 +7,13 @@ namespace InventoryManagementSystem.Models
     [Table("Category")]
     public class Category
     {
-       
         public int CategoryId { get; set; }
-        [Required]
-        [Remote("CheckCatNameUniq", "AttributesConstraints",AdditionalFields = "CategoryId")]
-        [MaxLength(100,ErrorMessage = "Category Name Max Length is 100 Chars")]
-         public string Name { get; set; }
 
-        [MaxLength(500,ErrorMessage ="Description Can't exceed 500 chars")]
+        [Required]
+        [MaxLength(100, ErrorMessage = "Category Name Max Length is 100 Chars")]
+        public string Name { get; set; }
+
+        [MaxLength(500, ErrorMessage = "Description Can't exceed 500 chars")]
         public string Description { get; set; }
 
         public virtual List<Product> Products { get; set; }

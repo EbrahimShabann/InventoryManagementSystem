@@ -4,7 +4,7 @@ using InventoryManagementSystem.Services.Data;
 
 namespace InventoryManagementSystem.Repositories
 {
-    public class SupplierRepository:ISupplierRepo
+    public class SupplierRepository : ISupplierRepo
     {
         private readonly AppDbContext db;
 

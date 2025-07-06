@@ -10,8 +10,6 @@ namespace InventoryManagementSystem.Services.ModelsConfig
         {
             builder.Property(w => w.IsActive).HasDefaultValueSql("1");
             builder.Property(w => w.CreatedAt).HasDefaultValueSql("GETDATE()");
-
-
         }
     }
 }
