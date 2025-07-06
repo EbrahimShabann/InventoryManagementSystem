@@ -8,14 +8,16 @@
     <form method="get" action="/Product/Index" class="mb-3">
         <div class="row g-2">
             <div class="col-12 col-md-3">
-                <input type="text" name="searchText" class="form-control form-control-sm" placeholder="Search by name" value="@ViewBag.SearchText" />
+                <input type="text" name="searchText" class="form-control form-control-sm" placeholder="Search by name"
+                    value="@ViewBag.SearchText" />
             </div>
             <div class="col-12 col-md-3">
                 <select name="categoryId" class="form-select form-select-sm">
                     <option value="">-- All Categories --</option>
                     @foreach (var cat in (IEnumerable<Category>)ViewBag.Categoriey)
                     {
-                        <option value="@cat.CategoryId" selected="@(ViewBag.CategoryId == cat.CategoryId ? "selected" : null)">@cat.Name</option>
+                        <option value="@cat.CategoryId"
+                            selected="@(ViewBag.CategoryId == cat.CategoryId ? "selected" : null)">@cat.Name</option>
                     }
                 </select>
             </div>
@@ -24,7 +26,8 @@
                     <option value="">-- All Suppliers --</option>
                     @foreach (var sup in (IEnumerable<Supplier>)ViewBag.Supplier)
                     {
-                        <option value="@sup.SupplierId" selected="@(ViewBag.SupplierId == sup.SupplierId ? "selected" : null)">@sup.Name</option>
+                        <option value="@sup.SupplierId"
+                            selected="@(ViewBag.SupplierId == sup.SupplierId ? "selected" : null)">@sup.Name</option>
                     }
                 </select>
             </div>
@@ -42,7 +45,8 @@
 
         <div class="card-body p-2">
             <div class="table-responsive">
-                <table class="table table-sm table-striped table-hover table-bordered align-middle compact-table" style="font-size: 0.9rem;">
+                <table class="table table-sm table-striped table-hover table-bordered align-middle compact-table"
+                    style="font-size: 0.9rem;">
                     <thead class="table-dark">
                         <tr>
                             <th>ID</th>
@@ -58,8 +62,10 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            var category = ((IEnumerable<Category>)ViewBag.Categoriey).FirstOrDefault(c => c.CategoryId == item.CategoryId);
-                            var supplier = ((IEnumerable<Supplier>)ViewBag.Supplier).FirstOrDefault(s => s.SupplierId == item.SupplierId);
+                            var category = ((IEnumerable<Category>)ViewBag.Categoriey).FirstOrDefault(c => c.CategoryId ==
+                            item.CategoryId);
+                            var supplier = ((IEnumerable<Supplier>)ViewBag.Supplier).FirstOrDefault(s => s.SupplierId ==
+                            item.SupplierId);
                             <tr>
                                 <td>@item.ProductId</td>
                                 <td>@item.Name</td>
@@ -72,7 +78,8 @@
                                     <div class="btn-group" role="group">
                                         <a href="/Product/Details/@item.ProductId" class="btn btn-info btn-sm">Details</a>
                                         <a href="/Product/Edit/@item.ProductId" class="btn btn-warning btn-sm">Edit</a>
-                                        <button class="btn btn-danger btn-sm" onclick="confirmDelete(@item.ProductId)">Delete</button>
+                                        <button class="btn btn-danger btn-sm"
+                                            onclick="confirmDelete(@item.ProductId)">Delete</button>
                                     </div>
                                 </td>
                             </tr>
@@ -85,7 +92,7 @@
                 @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
                 {
                     <a class="btn btn-sm @(i == (int)ViewBag.CurrentPage ? "btn-primary" : "btn-outline-primary") mx-1"
-                       href="/Product/Index?page=@i">@i</a>
+                        href="/Product/Index?page=@i">@i</a>
                 }
             </div>
         </div>
@@ -111,7 +118,8 @@
 </script>
 
 <style>
-    .compact-table th, .compact-table td {
+    .compact-table th,
+    .compact-table td {
         padding: 0px;
         vertical-align: middle;
     }

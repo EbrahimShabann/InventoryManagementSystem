@@ -29,7 +29,23 @@ namespace InventoryManagementSystem.Controllers
             var pagedResult = wareHouses.ToPagedResult(page, size);
             return View(pagedResult);
         }
+<<<<<<< Updated upstream
 
+=======
+        public IActionResult search(string searchText, int page = 1, int size = 10)
+        {
+            var wareHouses = uof.warehouseRepo.sort("", User);
+            dynamic pagedResult;
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                wareHouses = wareHouses.Where(w => w.Name.Contains(searchText) || w.Location.Contains(searchText)).ToList();
+                pagedResult = wareHouses.ToPagedResult(page, size);
+                return PartialView("sortTable", pagedResult);
+            }
+            pagedResult = wareHouses.ToPagedResult(page, size);
+            return PartialView("sortTable", pagedResult);
+        }
+>>>>>>> Stashed changes
         public IActionResult sortTable(string sortOrder, int page = 1, int size = 10)
         {
             ViewData["IdSortParam"] = String.IsNullOrEmpty(sortOrder) ? "id_desc" : "";

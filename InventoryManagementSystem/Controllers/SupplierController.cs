@@ -12,14 +12,30 @@ namespace InventoryManagementSystem.Controllers
         {
             this.uof = uof;
         }
-        public IActionResult Index(string sortOrder, int page = 1, int size = 10)
+
+        public IActionResult Index(string sortOrder, string searchString, int page = 1, int size = 10)
         {
-            ViewData["IdSortParam"] = String.IsNullOrEmpty(sortOrder) ? "id_desc" : "";
+            ViewData["IdSortParam"] = string.IsNullOrEmpty(sortOrder) ? "id_desc" : "";
             ViewData["NameSortParam"] = sortOrder == "name" ? "name_desc" : "name";
             ViewData["EmailSortParam"] = sortOrder == "email" ? "email_desc" : "email";
+            ViewData["CurrentFilter"] = searchString;
 
-            var suppliers = uof.supplierRepo.sort(sortOrder).AsEnumerable();
+            var suppliers = uof.supplierRepo.sort(sortOrder).AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                suppliers = suppliers.Where(s =>
+                    s.Name.Contains(searchString) ||
+                    (s.Email != null && s.Email.Contains(searchString))
+                );
+            }
+
             var pagedResult = suppliers.ToPagedResult(page, size);
+
+            ViewBag.CurrentPage = page;
+            ViewBag.PageSize = size;
+            ViewBag.TotalPages = pagedResult.TotalPages;
+
             return View(pagedResult);
         }
 
@@ -33,6 +49,8 @@ namespace InventoryManagementSystem.Controllers
             }
         }
         [HttpPost]
+        // [ValidateAntiForgeryToken]
+        // [Authorize(Roles = StaticDetails.Admin_Role)]
         public IActionResult UpSert(Supplier supplier)
         {
             try

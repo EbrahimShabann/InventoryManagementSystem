@@ -17,15 +17,29 @@
     <link href="~/assets/css/nucleo-icons.css" rel="stylesheet" />
     <link href="~/assets/css/argon-dashboard.min.css" rel="stylesheet" />
     <link href="~/assets/css/nucleo-svg.css" rel="stylesheet" />
+<<<<<<< Updated upstream
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
           integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
           crossorigin="anonymous"
           referrerpolicy="no-referrer" />
+=======
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        li a:hover {
+            background-color: lightgray;
+        }
+    </style>
+>>>>>>> Stashed changes
 </head>
 
 <body class="g-sidenav-show   bg-gray-100">
     <div class="min-height-300 bg-dark position-absolute w-100"></div>
+<<<<<<< Updated upstream
     <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 " id="sidenav-main">
         <div class="sidenav-header">
             <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
@@ -81,6 +95,125 @@
                             </ul>
                         </li>
 
+=======
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <aside
+            class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4"
+            id="sidenav-main">
+            <div class="sidenav-header">
+                <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
+                    id="iconSidenav"></i>
+                <a class="navbar-brand m-0" href="https://iti.gov.eg/home" target="_blank">
+                    <img src="/assets/img/logo-ct-dark.png" width="26px" height="26px" class="navbar-brand-img h-100"
+                        alt="main_logo">
+                    <span class="ms-1 fw-bold">ITI System</span>
+                </a>
+            </div>
+            <hr class="horizontal dark mt-0 mb-2">
+
+            <div class="px-3">
+                <h6 class="text-uppercase text-xs text-muted font-weight-bolder opacity-8">Main</h6>
+                <ul class="nav flex-column mb-3">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark d-flex align-items-center" asp-controller="home" asp-action="Index">
+                            <i class="fa fa-chart-line me-2 text-primary"></i>
+                            Dashboard
+                        </a>
+                    </li>
+
+                    @if (User.IsInRole(StaticDetails.Admin_Role) || User.IsInRole(StaticDetails.Manager_Role))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark d-flex align-items-center" asp-controller="WareHouse"
+                                asp-action="Index">
+                                <i class="fa-solid fa-warehouse me-2 text-secondary"></i>
+                                Warehouses
+                            </a>
+                        </li>
+                    }
+
+                    @if (User.IsInRole(StaticDetails.Admin_Role))
+                    {
+                        <li class="nav-item">
+
+                            <a class="nav-link text-dark d-flex align-items-center" asp-controller="User" asp-action="Index">
+                                <i class="fa-solid fa-users me-2 text-secondary"></i>
+                                Users
+                            </a>
+                        </li>
+                    }
+                    <li class="nav-item">
+                        <a class="nav-link text-dark d-flex align-items-center" asp-controller="Supplier"
+                            asp-action="Index">
+                            <i class="fa-solid fa-users me-2 text-secondary"></i>
+                            Suppliers
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark d-flex align-items-center" asp-controller="Transaction"
+                            asp-action="GetAllTransactions">
+                            <i class="fa-solid fa-money-bills me-2 text-success"></i>
+                            Transactions
+                        </a>
+                    </li>
+                </ul>
+
+
+                <h6 class="text-uppercase text-xs text-muted font-weight-bolder opacity-8">Inventory</h6>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark d-flex align-items-center" asp-controller="Category"
+                            asp-action="Index">
+                            <i class="fa-solid fa-layer-group me-2 text-dark"></i>
+                            Categories
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark d-flex align-items-center" asp-controller="Product" asp-action="Index">
+                            <i class="fa-solid fa-cubes me-2 text-info"></i>
+                            Products
+                        </a>
+                    </li>
+
+
+                    <li class="nav-item">
+                        <a class="nav-link text-dark d-flex align-items-center" asp-controller="InventoryItem"
+                            asp-action="Index">
+                            <i class="fa-solid fa-sitemap me-2"></i>
+                            Units
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <hr class="horizontal dark mt-3">
+            @RenderSection("asideNav", false)
+        </aside>
+
+
+    }
+
+    <main class="main-content position-relative border-radius-lg ">
+
+        <!-- Navbar -->
+        <nav class="navbar  navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl " id="navbarBlur"
+            data-scroll="false">
+            <div class="container-fluid">
+                <a class="navbar-brand text-light" asp-area="" asp-controller="Home" asp-action="Index">Inventory
+                    Management System</a>
+
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between"
+                    id="navbarSupportedContent">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+
+
+>>>>>>> Stashed changes
                     </ul>
                     <partial name="_LoginPartial" />
 
@@ -88,11 +221,17 @@
             </div>
         </nav>
         <!-- End Navbar -->
+<<<<<<< Updated upstream
+=======
+
+
+>>>>>>> Stashed changes
         <div class="container-fluid py-4">
 
             @RenderBody()
 
 
+<<<<<<< Updated upstream
             <footer class="footer pt-3  ">
                 <div class="container-fluid">
                     <div class="row align-items-center justify-content-lg-center">
@@ -105,6 +244,55 @@
                                 <a href="https://www.linkedin.com/in/ebrahim-shaban-380688205" class="font-weight-bold" target="_blank">Ebrahim Shaban</a>
                                 for a better web.
                             </div>
+=======
+            <footer class="bg-dark text-white py-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-4 mb-4 mb-lg-0">
+                            <h5 class="mb-4"><i class="fas fa-boxes me-2"></i>InventoryPro</h5>
+                            <p>The most powerful yet simple inventory management solution for modern businesses.</p>
+                        </div>
+                        <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                            <h5 class="mb-4">Product</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><a href="#" class="text-white-50">Features</a></li>
+                                <li class="mb-2"><a href="#" class="text-white-50">Pricing</a></li>
+                                <li class="mb-2"><a href="#" class="text-white-50">API</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                            <h5 class="mb-4">Company</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><a href="#" class="text-white-50">About</a></li>
+                                <li class="mb-2"><a href="#" class="text-white-50">Careers</a></li>
+                                <li class="mb-2"><a href="#" class="text-white-50">Contact</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            <h5 class="mb-4">Newsletter</h5>
+                            <div class="input-group mb-3">
+                                <input type="email" class="form-control" placeholder="Your email">
+                                <button class="btn btn-primary" type="button">Subscribe</button>
+                            </div>
+                            <div class="d-flex gap-3">
+                                <a href="#" class="text-white"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#" class="text-white"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#" class="text-white"><i class="fab fa-instagram"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-4 bg-secondary">
+                    <div class="row">
+                        <div class="col-md-6 text-center text-md-start">
+                            <p class="small mb-0">© 2025 InventoryPro. All rights reserved.</p>
+                        </div>
+                        <div class="col-md-6 text-center text-md-end">
+                            <p class="small mb-0">
+                                <a href="#" class="text-white-50 me-3">Privacy Policy</a>
+                                <a href="#" class="text-white-50">Terms of Service</a>
+                            </p>
+>>>>>>> Stashed changes
                         </div>
                     </div>
                 </div>

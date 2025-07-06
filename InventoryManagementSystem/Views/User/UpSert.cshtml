@@ -1,10 +1,10 @@
 ﻿@model UserVM
 
 @{
-    var roleId="";
+    var roleId = "";
     if (Model.ApplicationUser.Role != null)
     {
-         roleId = Model.RolesList.FirstOrDefault(r => r.Text == Model.ApplicationUser.Role).Value;
+        roleId = Model.RolesList.FirstOrDefault(r => r.Text == Model.ApplicationUser.Role).Value;
 
     }
 }
@@ -18,15 +18,9 @@
     </div>
 
     <div class="card-body ">
-        <form class="m-3"
-              id="upsertForm"
-              asp-controller="User"
-              asp-action="UpSert"
-              data-ajax="true"
-              data-ajax-method="post"
-              data-ajax-mode="replace"
-              data-ajax-update="#modalBody"
-              enctype="multipart/form-data">
+        <form class="m-3" id="upsertForm" asp-controller="User" asp-action="UpSert" data-ajax="true"
+            data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#modalBody"
+            enctype="multipart/form-data">
             <input asp-for="ApplicationUser.Id" type="hidden" />
             <div asp-validation-summary="All" class="text-danger"></div>
 
@@ -42,8 +36,8 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
 
             </div>
-           
-          
+
+
             <div>
                 <label asp-for="ApplicationUser.Address" class="m-2"></label>
                 <input class="form form-control w-100 m-2" asp-for="ApplicationUser.Address" />
@@ -59,11 +53,11 @@
             <div>
                 <label asp-for="ApplicationUser.Image" class="m-2"></label>
                 <input type="file" name="file" value="@Model.ApplicationUser.Image" accept="image/*" />
-                
+
 
             </div>
 
-            @if(Model.ApplicationUser.UserName == null)
+            @if (Model.ApplicationUser.UserName == null)
             {
                 <div>
                     <label asp-for="ApplicationUser.Role" class="m-2"></label>
@@ -79,7 +73,7 @@
                 <div>
                     <label asp-for="ApplicationUser.Role" class="m-2"></label>
                     <select class="form form-select" asp-for="ApplicationUser.Role" asp-items="@Model.RolesList">
-                        <option value="@roleId" >@Model.ApplicationUser.Role</option>
+                        <option value="@roleId">@Model.ApplicationUser.Role</option>
                     </select>
                     <span asp-validation-for="ApplicationUser.Role" class="text-danger"></span>
 
