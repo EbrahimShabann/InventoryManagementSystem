@@ -40,6 +40,11 @@ namespace InventoryManagementSystem
             builder.Services.AddRazorPages();
             builder.Services.AddScoped<IproductRepo, ProdcutRepo>();
             builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+            builder.Services.AddScoped<IWareHouseRepo, WareHouseRepository>();
+            builder.Services.AddScoped<ICategoryRepo, CategoryRepository>();
+            builder.Services.AddScoped<IproductRepo, ProdcutRepo>();
+            builder.Services.AddScoped<IInventoryItemRepo, InventoryItemRepository>();
+
 
 
 

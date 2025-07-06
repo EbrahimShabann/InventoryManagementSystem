@@ -1,17 +1,15 @@
 ﻿using InventoryManagementSystem.Models;
 using InventoryManagementSystem.Repositories.IRepositories;
 using InventoryManagementSystem.Services.Data;
-using InventoryManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Transactions;
 
 namespace InventoryManagementSystem.Repositories
 {
     public class TransactionRepository : ITransactionRepository
     {
+
         private readonly AppDbContext db;
-        List<Models.Transaction> transactions;
+        List<Transaction> transactions;
         public TransactionRepository(AppDbContext db)
         {
             this.db = db;
@@ -19,9 +17,10 @@ namespace InventoryManagementSystem.Repositories
 
         }
 
-        public void Add(Models.Transaction obj)
+        public void Add(Transaction obj)
         {
-            throw new NotImplementedException();
+            db.Transactions.Add(obj);
+            db.SaveChanges();
         }
 
         public void Delete(int? id)
@@ -29,14 +28,14 @@ namespace InventoryManagementSystem.Repositories
             throw new NotImplementedException();
         }
 
-        public List<Models.Transaction> GetAll()
+        public List<Transaction> GetAll()
         {
-            List<Models.Transaction> transactionViewModels = new List<Models.Transaction>();
+            List<Transaction> transactionViewModels = new List<Transaction>();
             foreach (var transaction in transactions) transactionViewModels.Add(FillTransactionViewModel(transaction));
             
             return transactionViewModels;
         }
-        Models.Transaction FillTransactionViewModel(Models.Transaction transaction)
+            Transaction FillTransactionViewModel(Transaction transaction)
         {
             string type = "";
             switch (transaction.TransactionType.ToLower())
@@ -54,7 +53,7 @@ namespace InventoryManagementSystem.Repositories
             return transaction;
         }
 
-        public Models.Transaction GetById(int? id)
+        public Transaction GetById(int? id)
         {
             return transactions.FirstOrDefault(t => t.TransactionId == id);
         }
@@ -69,9 +68,9 @@ namespace InventoryManagementSystem.Repositories
             throw new NotImplementedException();
         }
 
-        public List<Models.Transaction> GetTransactionsByDate(DateTime date)
+        public List<Transaction> GetTransactionsByDate(DateTime date)
         {
-            List<Models.Transaction> transactions = new List<Models.Transaction>();
+            List<Transaction> transactions = new List<Transaction>();
             foreach (var transaction in this.transactions)
             {
                 if(transaction.TransactionDate == date) transactions.Add(transaction);
@@ -79,7 +78,7 @@ namespace InventoryManagementSystem.Repositories
             return null;
         }
 
-        public void Update(Models.Transaction obj)
+        public void Update(Transaction obj)
         {
             throw new NotImplementedException();
         }

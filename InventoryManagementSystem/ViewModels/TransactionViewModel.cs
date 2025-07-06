@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace InventoryManagementSystem.ViewModels
 {
-    public class TransactionViewModel: GetAllTransactionsViewModel
+    public class TransactionViewModel: AddTransactionViewModel
     {
         public int WareHouseId { get; set; }
 
