@@ -1,26 +1,79 @@
 @model InventoryManagementSystem.Models.Category
 @{
+    var isAdd = Model.CategoryId == 0;
     Layout = null;
 }
-<form asp-action="@(Model.CategoryId == 0 ? "Add" : "Edit")" method="post" id="categoryForm">
-    @Html.AntiForgeryToken()
-    <div class="form-group">
-        <label asp-for="Name" class="control-label"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+<div class="card shadow ">
+    <div class="card-header text-white bg-dark d-flex justify-content-between">
+        <h2 class="text-white ">@(isAdd ? "Add " : "Edit ") Category </h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fa-solid fa-xmark bg-dark text-light"></i>
+        </button>
     </div>
-    <div class="form-group">
-        <label asp-for="Description" class="control-label"></label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
+    <div class="card-body ">
+        <form id="categoryForm" asp-controller="Category" asp-action="UpSert" method="post">
+            <input asp-for="CategoryId" type="hidden" />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group mb-3">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="d-flex justify-content-between mt-3">
+                <button type="submit" class="btn btn-success form form-control">Save</button>
+                <button type="button" class="btn btn-secondary form form-control" data-bs-dismiss="modal">Close</button>
+            </div>
+        </form>
     </div>
-    <input type="hidden" asp-for="CategoryId" />
-    <div class="form-group mt-2">
-        <input type="submit" value="Save" class="btn btn-primary" />
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-    </div>
-</form>
+</div>
 
-@section Scripts {
-    @await Html.PartialAsync("~/Views/Shared/_ValidationScriptsPartial.cshtml")
-}
+<script>
+    $(document).ready(function() {
+        $('#categoryForm').submit(function(e) {
+            e.preventDefault();
+
+            var form = $(this);
+            $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                data: form.serialize(),
+                success: function(response) {
+                    if (response === 'success') {
+                        $('#upsertModal').modal('hide');
+                        // Refresh the table
+                        $.get('/Category/Index', function(data) {
+                            var html = $(data).find('#injectTable').html();
+                            $('#injectTable').html(html);
+                        });
+                        // Show success message
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: 'Category saved successfully',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    } else {
+                        // If there are validation errors, update the modal content
+                        $('#modalBody').html(response);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Show detailed error message
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred: ' + error,
+                        footer: 'Please try again or contact support'
+                    });
+                    console.error('Error:', error);
+                }
+            });
+        });
+    });
+</script>

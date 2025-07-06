@@ -15,6 +15,8 @@ namespace InventoryManagementSystem.Services.ViewModels
         [Required]
         [MinLength(7,ErrorMessage ="Full Name Must be at least 7 chars")]
         [MaxLength(50,ErrorMessage = "Full Name can't be more than 50 chars")]
+        [RegularExpression(@"^[a-zA-Z][a-zA-Z0-9_]{2,19}$",
+            ErrorMessage = "Username must start with a letter, can contain letters, numbers, and underscores, and be between 3 and 20 characters long.")]
         public string UserName { get; set; }
 
 

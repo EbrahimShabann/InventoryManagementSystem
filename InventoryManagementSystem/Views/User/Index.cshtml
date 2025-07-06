@@ -4,6 +4,11 @@
     ViewData["Title"] = "Users";
 }
 
+
+<div class="col-12 col-md-3 mb-3">
+    <input type="text" name="searchText" class="form-control form-control-sm"
+           id="searchText" placeholder="Search by name" oninput="search(this)" />
+</div>
 <partial name="_UpSertModalPartial" />
 
 @section asideNav {
@@ -111,6 +116,24 @@
         });
     });
 
+      //search
+                function search(input){
+                    var searchtext = $(input).val();
+                    console.log(searchtext);
+
+                    $.ajax({
+                        url:`/User/search?searchText=${searchtext}`,
+                        success: function(result){
+                            $("#injectTable").html(result);
+                        },
+                        error: function () {
+                            alert("Failed to serach.");
+                        }
+                    })
+                }
+
+
+   
 </script>
 
 <partial name="_PaginationControls" />

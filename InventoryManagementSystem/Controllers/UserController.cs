@@ -33,6 +33,21 @@ namespace InventoryManagementSystem.Controllers
           
             return View(paged);
         }
+        public IActionResult search(string searchText, int page = 1, int size = 10)
+        {
+            var users = uof.AppUserRepo.sort("");
+            dynamic pagedResult;
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                users = users.Where(w => w.UserName.Contains(searchText) || w.Address.Contains(searchText)).ToList();
+                pagedResult = users.ToPagedResult(page, size);
+                return PartialView("sortTable", pagedResult);
+            }
+            pagedResult = users.ToPagedResult(page, size);
+            return PartialView("sortTable", pagedResult);
+
+
+        }
         public IActionResult sortTable(string sortOrder, int page = 1, int size = 10)
         {
             ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -92,12 +107,19 @@ namespace InventoryManagementSystem.Controllers
         [ValidateAntiForgeryToken]
 		public async Task<IActionResult> UpSert(UserVM userVM,IFormFile file)
 		{
+            var Roles = db.Roles.Select(u => new SelectListItem
+            {
+                Text = u.Name,
+                Value = u.Id
+            });
+
             try
             {
 
 
                 if (ModelState.IsValid)
                 {
+                    userVM.RolesList = Roles;
                     if (file != null)
                     {
                         string fileName = Path.GetFileName(file.FileName);
@@ -119,12 +141,29 @@ namespace InventoryManagementSystem.Controllers
                         string roleName = uof.AppUserRepo.GetRoleName(userVM.ApplicationUser.Role);
                         string password = userVM.ApplicationUser.UserName + "A253@"; //  create password from username + A253@ ex ahmedA253@ || managerA253@
 
-                        await _userManager.CreateAsync(userVM.ApplicationUser, password);
-                        await _userManager.AddToRoleAsync(userVM.ApplicationUser,roleName);
+                        var createResult = await _userManager.CreateAsync(userVM.ApplicationUser, password);
+                        if (createResult.Succeeded)
+                        {
+                            await _userManager.AddToRoleAsync(userVM.ApplicationUser, roleName);
+                        }
+                        else
+                        {
+                            foreach (var error in createResult.Errors)
+                            {
+                                ModelState.AddModelError(string.Empty, error.Description);
+                            }
+                            return PartialView(userVM);
+                        }
+
                     }
                     else
                     {
                         //user existed and try to update it
+
+                        userFromDb.UserName = userVM.UserName;
+                        userFromDb.Email = userVM.Email;
+                        userFromDb.PhoneNumber = userVM.PhoneNumber;
+
                         string oldRole = uof.AppUserRepo.GetRoleOfUser(userVM.ApplicationUser.Id);
                         string newRole = uof.AppUserRepo.GetRoleName(userVM.ApplicationUser.Role);
                         if (newRole != oldRole)
@@ -136,6 +175,7 @@ namespace InventoryManagementSystem.Controllers
 
                             }
                             await _userManager.AddToRoleAsync(userFromDb, newRole);
+                           
 
                         }
                         if (userVM.ApplicationUser.Image != null)
@@ -143,11 +183,21 @@ namespace InventoryManagementSystem.Controllers
                             userFromDb.Image = userVM.ApplicationUser.Image;
 
                         }
-                        await _userManager.UpdateAsync(userFromDb);
+                        var updatedResult=await _userManager.UpdateAsync(userFromDb);
+                        if (!updatedResult.Succeeded)
+                        
+                        {
+                            foreach (var error in updatedResult.Errors)
+                            {
+                                ModelState.AddModelError(string.Empty, error.Description);
+                            }
+                         
+                        }
                         //uof.AppUserRepo.Update(userFromDb);
-                        //uof.Save();
+
 
                     }
+                    uof.Save();
                     return RedirectToAction("Index");
                 }
             }
