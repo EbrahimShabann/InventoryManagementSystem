@@ -3,6 +3,7 @@ using InventoryManagementSystem.Repositories;
 using InventoryManagementSystem.Repositories.IRepositories;
 using InventoryManagementSystem.Services.Data;
 using InventoryManagementSystem.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Controller = Microsoft.AspNetCore.Mvc.Controller;
@@ -10,6 +11,7 @@ using JsonResult = Microsoft.AspNetCore.Mvc.JsonResult;
 
 namespace InventoryManagementSystem.Controllers
 {
+    [Authorize]
     public class TransactionController : Controller
     {
         ITransactionRepository transaction;
