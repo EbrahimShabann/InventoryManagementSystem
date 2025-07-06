@@ -3,9 +3,11 @@ using InventoryManagementSystem.Repositories.IRepositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace InventoryManagementSystem.Controllers
 {
+    [Authorize]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork uof;

@@ -8,10 +8,32 @@
     var totalPages = ViewBag.TotalPages ?? 1;
 }
 
+@section asideNav {
+
+    <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link UpSert-btn" asp-action="UpSert">
+
+                    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-key-25 text-dark text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">+ Add Item</span>
+                </a>
+            </li>
+
+
+
+        </ul>
+    </div>
+
+}
+
+
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center">
         <h2>Inventory Items</h2>
-        <a asp-action="UpSert" class="btn btn-primary">+ Add Item</a>
+       
     </div>
 
     <a asp-action="Index" asp-route-sortOrder="@ViewData["IdSortParam"]" asp-route-searchString="@currentFilter">ID</a>
@@ -22,7 +44,7 @@
         <div class="input-group" style="max-width: 400px;">
             <input type="text" name="searchString" value="@currentFilter" class="form-control"
                 placeholder="Search item..." />
-            <button type="submit" class="btn btn-outline-secondary">Search</button>
+            <button type="submit" class="btn btn-outline-secondary form-control">Search</button>
         </div>
     </form>
 

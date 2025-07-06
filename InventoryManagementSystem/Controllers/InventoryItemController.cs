@@ -3,11 +3,13 @@ using InventoryManagementSystem.Repositories;
 using InventoryManagementSystem.Repositories.IRepositories;
 using InventoryManagementSystem.Services.Data;
 using InventoryManagementSystem.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace InventoryManagementSystem.Controllers
 {
+    [Authorize]
     public class InventoryItemController : Controller
     {
         IproductRepo productRepo;

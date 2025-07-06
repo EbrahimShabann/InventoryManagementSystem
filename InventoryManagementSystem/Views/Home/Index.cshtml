@@ -1,6 +1,11 @@
 ﻿@using InventoryManagementSystem.ViewModels
 @model homeViewModel
-
+<style>
+    .card:hover{
+        transform:scale(1.05);
+        transition:all 2s ease;
+    }
+</style>
 <div class="row">
     <div class="col-md-3">
         <div class="card bg-light">
@@ -89,13 +94,13 @@
                     <div class="fw-semibold">@item.Name</div>
                     <small class="text-muted">ID : @item.SupplierId</small>
                 </div>
-                <div class="text-end">
+                <div class="text-center me-5">
                     <div class="text-success small">Phone</div>
                     <div class="fw-bold text-danger">@item.Phone</div>
                 </div>
                 <div class="text-end">
                     <div class="text-success small">Address</div>
-                    <div class="fw-bold text-danger">@item.Address</div>
+                    <div class="fw-bold text-danger">@item.Address.Substring(0,10)</div>
                 </div>
             </div>
 

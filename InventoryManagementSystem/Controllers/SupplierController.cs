@@ -1,10 +1,12 @@
 ﻿using InventoryManagementSystem.Models;
 using InventoryManagementSystem.Repositories.IRepositories;
 using InventoryManagementSystem.Services.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryManagementSystem.Controllers
 {
+    [Authorize]
     public class SupplierController : Controller
     {
         private readonly IUnitOfWork uof;
