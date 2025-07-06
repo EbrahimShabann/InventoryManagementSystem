@@ -1,0 +1,442 @@
+﻿:root {
+    --primary: #4361ee;
+    --primary-light: #4895ef;
+    --secondary: #3f37c9;
+    --success: #4cc9f0;
+    --danger: #f72585;
+    --warning: #fca311;
+    --dark: #14213d;
+    --light: #f8f9fa;
+    --gray: #e5e5e5;
+    --text: #333;
+    --text-light: #6c757d;
+    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    --card-spacing: 24px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #f0f2f5 0%, #e6e9ef 100%);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header Styles */
+.page-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    animation: fadeInDown 0.8s ease;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 0.5rem;
+}
+
+.page-header p {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Card Styles */
+.card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    transition: var(--transition);
+    margin-bottom: var(--card-spacing);
+}
+
+.card-spacer {
+    height: var(--card-spacing);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    padding: 1.5rem 2rem;
+    color: white;
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text);
+}
+
+.form-control, .form-select {
+    width: 100%;
+    padding: 0.9rem 1.2rem;
+    border: 1px solid var(--gray);
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: var(--transition);
+    background-color: #fff;
+    color: var(--text);
+}
+
+    .form-control:focus, .form-select:focus {
+        outline: none;
+        border-color: var(--primary-light);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+    }
+
+/* Stock Card */
+.stock-card {
+    background: linear-gradient(135deg, #f8f9fc 0%, #e0e6f8 100%);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: var(--transition);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 1px solid rgba(67, 97, 238, 0.1);
+}
+
+    .stock-card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 5px 15px rgba(67, 97, 238, 0.1);
+    }
+
+.stock-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--primary);
+    animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.stock-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin: 0.5rem 0;
+    transition: var(--transition);
+}
+
+/* Buttons */
+.btn {
+    padding: 0.9rem 1.8rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    border: none;
+}
+
+    .btn i {
+        margin-right: 8px;
+    }
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    box-shadow: 0 4px 12px rgba(67, 97, 238, 0.25);
+}
+
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 7px 20px rgba(67, 97, 238, 0.35);
+    }
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--gray);
+    color: var(--text);
+}
+
+    .btn-outline:hover {
+        background-color: #f8f9fa;
+        border-color: var(--primary-light);
+        color: var(--primary);
+    }
+
+/* Transaction Type Indicator */
+.transaction-indicator {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 6px;
+    height: 100%;
+    border-radius: 0 10px 10px 0;
+    transition: var(--transition);
+}
+
+.transaction-in .transaction-indicator {
+    background-color: var(--success);
+}
+
+.transaction-out .transaction-indicator {
+    background-color: var(--danger);
+}
+
+.transaction-adj .transaction-indicator {
+    background-color: var(--warning);
+}
+
+/* Grid Layout */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+}
+
+    .row > div {
+        margin: 10px;
+    }
+
+.col {
+    padding: 0 15px;
+    flex: 1;
+    min-width: 250px;
+}
+
+.col-md-6 {
+    width: 50%;
+}
+
+/* Animation for numbers */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.stock-change {
+    animation: pulse 0.6s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .col-md-6 {
+        width: 100%;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    .page-header h1 {
+        font-size: 2rem;
+    }
+
+    :root {
+        --card-spacing: 20px;
+    }
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 2rem 0;
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+/* Form row spacing */
+.form-row {
+    margin-bottom: 1.5rem;
+}
+
+/* Button container */
+.btn-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    gap: 15px;
+}
+
+/* Validation */
+.validation-message {
+    color: var(--danger);
+    font-size: 0.85rem;
+    margin-top: 0.4rem;
+    display: block;
+}
+
+/* Stats Card */
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.stat-card {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: var(--transition);
+}
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    }
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-size: 1.5rem;
+}
+
+.stat-info h3 {
+    font-size: 1.8rem;
+    margin-bottom: 0.25rem;
+}
+
+.stat-info p {
+    color: var(--text-light);
+    margin: 0;
+}
+
+/* Transactions List */
+.transaction-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.transaction-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+    transition: var(--transition);
+}
+
+    .transaction-item:hover {
+        transform: translateX(5px);
+        background: #f0f2f5;
+    }
+
+.transaction-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    color: white;
+}
+
+    .transaction-icon.success {
+        background: var(--success);
+    }
+
+    .transaction-icon.danger {
+        background: var(--danger);
+    }
+
+    .transaction-icon.warning {
+        background: var(--warning);
+    }
+
+.transaction-info {
+    flex: 1;
+}
+
+    .transaction-info h4 {
+        margin-bottom: 0.25rem;
+    }
+
+    .transaction-info p {
+        color: var(--text-light);
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+.transaction-amount {
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+/* Spacing adjustments */
+.section-spacing {
+    margin-bottom: var(--card-spacing);
+}

@@ -1,18 +1,77 @@
-﻿@model PagedResult<Transaction>
+﻿@model List<Transaction>
 @{
     ViewData["Title"] = "GetAllTransactions";
+    var page = ViewBag.CurrentPage ?? 1;
+    var size = ViewBag.PageSize ?? 10;
+    var totalPages = ViewBag.TotalPages ?? 1;
+    
 }
+
 <link href="/css/transactionCSS/GetAllTransactions.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" rel="stylesheet">
+
+
+<style>
+    /* Add this to your CSS */
+    .dropdown-container {
+        position: relative;
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+    }
+
+        .dropdown-container i.fas {
+            position: absolute;
+            left: 15px;
+            z-index: 10;
+            color: #6c757d;
+
+        }
+
+    .warehouse-dropdown {
+        padding-left: 50px !important; 
+        height: 45px;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+        border-radius: 50px;
+        border: 1px solid #e0e6ed;
+        padding: 0.8rem 1.5rem;
+    }
+
+        .warehouse-dropdown option {
+            padding: 8px 0;
+            line-height: 1.5;
+        }
+
+    .dropdown-indicator {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #6c757d;
+        pointer-events: none;
+    }
+</style>
+
+
+
 
 <div class="header">
     <div class="container">
         <div class="d-flex justify-content-between align-items-center">
             <div>
-                <h1 class="mb-0"><i class="fas fa-warehouse me-2"></i>Inventory Transactions</h1>
-                <p class="mb-0 mt-2">Track all product movements and stock changes</p>
+                <h1 class="mb-0 animated fadeInUp"><i class="fas fa-warehouse me-2"></i>Inventory Transactions</h1>
+                <p class="mb-0 mt-2 animated fadeInUp delay-1">Track all product movements and stock changes</p>
             </div>
-            <div>
-                <button class="btn btn-light"><i class="fas fa-sync-alt me-2"></i>Refresh</button>
+            <div class="animated fadeInUp delay-2">
+                <a href="/Transaction/GetAllTransactions" class="btn btn-light">
+                    <i class="fas fa-sync-alt me-2"></i>Refresh
+                </a>
             </div>
         </div>
     </div>
@@ -21,30 +80,30 @@
 <div class="container">
     <!-- Stats Cards -->
     <div class="row mb-4">
-        <div class="col-md-3">
+        <div class="col-md-3 animated fadeInUp delay-1">
             <div class="card stats-card">
-                <i class="fas fa-exchange-alt"></i>
-                <div class="number">@Model.TotalItems.Count()</div>
+                <i class="fas fa-exchange-alt text-primary"></i>
+                <div class="number">@(ViewBag.countout + ViewBag.countin + ViewBag.countadj)</div>
                 <div class="label">Total Transactions</div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 animated fadeInUp delay-2">
             <div class="card stats-card">
-                <i class="fas fa-arrow-circle-down text-danger"></i>
+                <i class="fas fa-arrow-circle-down text-success"></i>
                 <div class="number">@ViewBag.countout</div>
                 <div class="label">Incoming Stock</div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 animated fadeInUp delay-3">
             <div class="card stats-card">
-                <i class="fas fa-arrow-circle-up text-success"></i>
+                <i class="fas fa-arrow-circle-up text-danger"></i>
                 <div class="number">@ViewBag.countin</div>
                 <div class="label">Outgoing Stock</div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 animated fadeInUp delay-4">
             <div class="card stats-card">
-                <i class="fas fa-sliders-h"></i>
+                <i class="fas fa-sliders-h text-warning"></i>
                 <div class="number">@ViewBag.countadj</div>
                 <div class="label">Adjustments</div>
             </div>
@@ -52,34 +111,77 @@
     </div>
 
     <!-- Controls -->
-    <div class="card mb-4">
+    <div class="card mb-4 animated fadeInUp delay-2">
         <div class="card-body">
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="search-container">
-                        <i class="fas fa-search"></i>
-                        <input type="text" class="form-control" placeholder="Search transactions...">
+            <form class="filter-form" method="get" action="/Transaction/GetAllTransactions">
+                <input type="hidden" name="page" value="1" />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <div class="date-range-container">
+                                    <i class="fas fa-calendar-start"></i>
+                                    <input type="date" name="startDate"
+                                           value="@(ViewBag.startDate?.ToString("yyyy-MM-dd"))"
+                                           class="form-control date-range-input">
+
+                                    
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="date-range-container">
+                                    <i class="fas fa-calendar-end"></i>
+                                    <input type="date" name="endDate"
+                                           value="@(ViewBag.endDate?.ToString("yyyy-MM-dd"))"
+                                           class="form-control date-range-input">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="d-flex gap-2">
-                        <select class="form-select">
-                            <option>All Warehouses</option>
-                            <option>Main Warehouse</option>
-                            <option>East Warehouse</option>
-                            <option>West Distribution</option>
-                        </select>
-                        <button class="btn btn-primary"><i class="fas fa-plus me-2"></i>New</button>
+                    <div class="col-md-6">
+                        <div class="d-flex gap-2">
+                            <div class="dropdown-container">
+                                <i class="fas fa-warehouse"></i>
+                                <select class="form-select warehouse-dropdown" name="warehouseId">
+                                    <option value="" selected="@(ViewBag.WareHouseId == 0)">All Warehouses</option>
+                                    @foreach (WareHouse warehouse in ViewBag.WareHouses)
+                                    {
+                                        <option value="@warehouse.WareHouseId" selected="@(warehouse.WareHouseId == @ViewBag.WareHouseId)">
+                                            @warehouse.Name
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary filter-btn">
+                                <i class="fas fa-filter me-2"></i>Filter
+                            </button>
+                            <a href="/Transaction/AddTransaction" class="btn btn-primary">
+                                <i class="fas fa-plus me-2"></i>Add
+                            </a>
+                           
+                        </div>
                     </div>
+
+
                 </div>
-            </div>
+
+
+@*                 <input type="hidden" name="page" value="@page" />
+ *@                <input type="hidden" name="pageSize" value="@size" />
+            </form>
         </div>
     </div>
 
     <!-- Transactions Table -->
-    <div class="card">
+    <div class="card animated fadeInUp delay-3">
         <div class="card-header bg-white">
-            <h5 class="mb-0"><i class="fas fa-list me-2"></i>Recent Transactions</h5>
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-list me-2"></i>Recent Transactions</h5>
+                <div>
+                    Showing @Model.Count of @ViewBag.TotalCount records
+                </div>
+            </div>
         </div>
         <div class="card-body">
             <div class="table-container">
@@ -96,36 +198,136 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var instruction in Model.Items)
+                        @foreach (var transaction in Model)
                         {
-                            <tr>
-                                <td>@instruction.TransactionId</td>
-                                <td>@instruction.Product.Name</td>
+                            <tr class="animated fadeInUp">
+                                <td>@transaction.TransactionId</td>
+                                <td>@transaction.Product.Name</td>
                                 <td>
-                                    <span class="transaction-type @(instruction.TransactionType.ToLower())">
-                                        @instruction.TransactionType
-                                    </span>
+                                    @if (transaction.TransactionType.Equals("In", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <span class="transaction-type incoming">Incoming</span>
+                                    }
+                                    else if (transaction.TransactionType.Equals("Out", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <span class="transaction-type outgoing">Outgoing</span>
+                                    }
+                                    else if (transaction.TransactionType.Equals("Adj", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <span class="transaction-type adjustment">Adjustment</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="transaction-type">@transaction.TransactionType</span>
+                                    }
                                 </td>
-                                <td>@instruction.QuantityChange</td>
+                                <td>@transaction.QuantityChange</td>
                                 <td>
-                                    <span class="transaction-date">@instruction.TransactionDate.ToString("dd/MM/yyyy")</span>
+                                    <span class="transaction-date">@transaction.TransactionDate.ToString("dd/MM/yyyy")</span>
                                 </td>
-                                <td>@instruction.WareHouse.Name</td>
+                                <td>@transaction.WareHouse.Name</td>
                                 <td>
-                                    <a href="/Transaction/GetTransactionById/@instruction.TransactionId" class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></a>
-                                    <a class="btn btn-sm btn-outline-secondary"><i class="fas fa-print"></i></a>
+                                    <a href="/Transaction/GetTransactionById/@transaction.TransactionId" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
                                 </td>
                             </tr>
                         }
-
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center py-4">
+                                    <div class="d-flex flex-column align-items-center">
+                                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                                        <h5 class="mb-2">No transactions found</h5>
+                                        <p class="text-muted">Try adjusting your filters or add a new transaction</p>
+                                        <a href="/Transaction/GetAllTransactions" class="btn btn-sm btn-outline-primary mt-2">
+                                            <i class="fas fa-sync-alt me-1"></i>Reset Filters
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
+            
+            @if (totalPages > 1)
+            {
+                <nav class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item @(page == 1 ? "disabled" : "")">
 
+                            <a class="page-link" href="@Url.Action("GetAllTransactions", new { page = 1, pageSize = size, ViewBag.WareHouseId, ViewBag.startDate, ViewBag.endDate })">
+                                <i class="fas fa-angle-double-left"></i>
+                            </a>
+                        </li>
+                        <li class="page-item @(page == 1 ? "disabled" : "")">
+                            <a class="page-link" href="@Url.Action("GetAllTransactions", new { page = page - 1, pageSize = size, ViewBag.WareHouseId, ViewBag.startDate, ViewBag.endDate })">
+                                <i class="fas fa-angle-left"></i>
+                            </a>
+                        </li>
+                        
+                        @for (int i = Math.Max(1, page - 2); i <= Math.Min(totalPages, page + 2); i++)
+                        {
+                            <li class="page-item @(i == page ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("GetAllTransactions", new { page = i, pageSize = size, ViewBag.WareHouseId, ViewBag.startDate, ViewBag.endDate })">@i</a>
+                            </li>
+                        }
+                        
+                        <li class="page-item @(page == totalPages ? "disabled" : "")">
+                            <a class="page-link" href="@Url.Action("GetAllTransactions", new { page = page + 1, pageSize = size, ViewBag.WareHouseId, ViewBag.startDate, ViewBag.endDate })">
+                                <i class="fas fa-angle-right"></i>
+                            </a>
+                        </li>
+                        <li class="page-item @(page == totalPages ? "disabled" : "")">
+                            <a class="page-link" href="@Url.Action("GetAllTransactions", new { page = totalPages, pageSize = size, ViewBag.WareHouseId, ViewBag.startDate, ViewBag.endDate })">
+                                <i class="fas fa-angle-double-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            }
         </div>
     </div>
 
-    <div class="footer">
-        <p class="mb-0">Inventory Management System &copy; 2023 | All Rights Reserved</p>
+    <div class="footer animated fadeInUp delay-4">
+        <p class="mb-0">Inventory Management System &copy; @DateTime.Now.Year | All Rights Reserved</p>
     </div>
 </div>
+
+<script>
+    // Add animation to table rows when they come into view
+    document.addEventListener('DOMContentLoaded', function() {
+        const rows = document.querySelectorAll('.transaction-table tbody tr');
+        
+        rows.forEach((row, index) => {
+            // Add delay for staggered animation
+            row.style.animationDelay = `${index * 0.1}s`;
+            row.classList.add('animated', 'fadeInUp');
+            
+            // Add hover effect programmatically
+            row.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateX(5px)';
+                this.style.boxShadow = '0 5px 15px rgba(0,0,0,0.05)';
+            });
+            
+            row.addEventListener('mouseleave', function() {
+                this.style.transform = '';
+                this.style.boxShadow = '';
+            });
+        });
+        
+        // Add animation to stats cards
+        const statsCards = document.querySelectorAll('.stats-card');
+        statsCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = '';
+            });
+        });
+        
+</script>

@@ -1,7 +1,352 @@
-﻿
+﻿@using InventoryManagementSystem.ViewModels
+
+@model AddTransactionViewModel
 @{
-    ViewData["Title"] = "AddTransaction";
+    ViewData["Title"] = "Add Transaction";
+
 }
+<link href="/css/TransactionCSS/AddTransaction.css" rel="stylesheet" />
 
-<h1>AddTransaction</h1>
 
+
+<body>
+    <div class="container">
+        
+
+        <div class="row">
+            <div class="col-md-5">
+                <div class="card section-spacing">
+                    <div class="card-header">
+                        <h2><i class="fas fa-exchange-alt me-2"></i>Create New Transaction</h2>
+                    </div>
+                    <div class="card-body">
+                        <form id="transactionForm" asp-action="SaveAddTransaction" method="post">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="form-label">Category</label>
+                                        <select asp-for="CategoryId"
+                                                asp-items="Model.Categories"
+                                                class="form-select"
+                                                id="categorySelect">
+                                            <option value="">-- Select Category --</option>
+                                        </select>
+                                        <span asp-validation-for="CategoryId" class="validation-message"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="form-label">Product</label>
+                                        <select asp-for="Transaction.ProductId"
+                                                class="form-select"
+                                                id="productSelect">
+                                            <option value="">-- Select Product --</option>
+                                            @* Products will be populated dynamically *@
+                                        </select>
+                                        <span asp-validation-for="Transaction.ProductId" class="validation-message"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="form-label">Quantity</label>
+                                        <input asp-for="Transaction.QuantityChange"
+                                               type="number"
+                                               class="form-control"
+                                               min="1"
+                                               value="1" />
+                                        <span asp-validation-for="Transaction.QuantityChange" class="validation-message"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col">
+                                    <div class="form-group transaction-in">
+                                        <label class="form-label">Transaction Type</label>
+                                        <select asp-for="Transaction.TransactionType"
+                                                class="form-select"
+                                                id="transactionTypeSelect">
+                                            <option value="In">Stock In</option>
+                                            <option value="Out">Stock Out</option>
+                                            <option value="Adj">Adjustment</option>
+                                        </select>
+                                        <div class="transaction-indicator"></div>
+                                        <span asp-validation-for="Transaction.TransactionType" class="validation-message"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Warehouse Selection -->
+                            <div class="form-row">
+                                <div class="col" id="sourceWarehouseGroup">
+                                    <div class="form-group">
+                                        <label class="form-label">Warehouse</label>
+                                        <select asp-for="Transaction.WareHouseId"
+                                                asp-items="Model.Warehouses"
+                                                class="form-select"
+                                                id="warehouseSelect">
+                                            <option value="">-- Select Warehouse --</option>
+                                        </select>
+                                        <span asp-validation-for="Transaction.WareHouseId" class="validation-message"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Adjustment Warehouses (Hidden by default) -->
+                                <div class="col" id="adjustmentWarehouseGroup" style="display: none;">
+                                    <div class="form-group">
+                                        <label class="form-label">From Warehouse</label>
+                                        <select asp-for="FromWarehouseId"
+                                                asp-items="Model.Warehouses"
+                                                class="form-select"
+                                                id="fromWarehouseSelect">
+                                            <option value="">-- Select Warehouse --</option>
+                                        </select>
+                                        <span asp-validation-for="FromWarehouseId" class="validation-message"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col" id="adjustmentToWarehouseGroup" style="display: none;">
+                                    <div class="form-group">
+                                        <label class="form-label">To Warehouse</label>
+                                        <select asp-for="ToWarehouseId"
+                                                asp-items="Model.Warehouses"
+                                                class="form-select"
+                                                id="toWarehouseSelect">
+                                            <option value="">-- Select Warehouse --</option>
+                                        </select>
+                                        <span asp-validation-for="ToWarehouseId" class="validation-message"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col">
+                                    <div class="stock-card">
+                                        <div class="stock-icon">
+                                            <i class="fas fa-boxes"></i>
+                                        </div>
+                                        <h3>Current Stock</h3>
+                                        <div class="stock-value" id="stockDisplay">0</div>
+                                        <p class="text-muted">Select a product and warehouse</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="btn-container">
+                                <a asp-action="GetAllTransactions" class="btn btn-outline">
+                                    <i class="fas fa-arrow-left me-2"></i>Back to Transactions
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-plus-circle me-2"></i>Create Transaction
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card section-spacing">
+                    <div class="card-header">
+                        <h2><i class="fas fa-chart-line me-2"></i>Inventory Stats</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="stats-container">
+
+                            <div class="stat-card">
+                                <div class="stat-icon" style="background: rgba(67, 97, 238, 0.1); color: var(--primary);">
+                                    <i class="fas fa-warehouse"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>
+                                        @ViewBag.CountWarehouses
+                                    </h3>
+                                    <p>Warehouses</p>
+                                </div>
+                            </div>
+
+                            <div class="stat-card">
+                                <div class="stat-icon" style="background: rgba(76, 201, 240, 0.1); color: var(--success);">
+                                    <i class="fas fa-box-open"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>
+                                        @ViewBag.CountProducts
+                                    </h3>
+                                    <p>Products</p>
+                                </div>
+                            </div>
+
+                            <div class="stat-card">
+                                <div class="stat-icon" style="background: rgba(252, 163, 17, 0.1); color: var(--warning);">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>
+                                        @ViewBag.CountTransactions
+                                    </h3>
+                                    <p>Transactions</p>
+                                </div>
+                            </div>
+
+                            <div class="stat-card">
+                                <div class="stat-icon" style="background: rgba(247, 37, 133, 0.1); color: var(--danger);">
+                                    <i class="fas fa-sync-alt"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>98%</h3>
+                                    <p>Accuracy Rate</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-history me-2"></i>Recent Transactions</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="transaction-list">
+
+                            @foreach (Transaction transaction in ViewBag.RecentTransactions)
+                            {
+                                <div class="transaction-item">
+                                    <div class="transaction-icon @(transaction.TransactionType.ToLower() == "in" ? "success" : transaction.TransactionType.ToLower() == "out" ? "danger" : "warning")">
+                                        <i class="fas @(transaction.TransactionType.ToLower() == "in" ? "fa-arrow-down" : transaction.TransactionType.ToLower() == "out" ? "fa-arrow-up" : "fa-adjust")"></i>
+                                    </div>
+                                    <div class="transaction-info">
+                                        <h4>@transaction.Product.Name</h4>
+                                        <p>@($"{transaction.TransactionType} - {transaction.WareHouse.Name}")</p>
+                                    </div>
+                                    <div class="transaction-amount" style="color: @(transaction.TransactionType.ToLower() == "in" ? "var(--success)" : transaction.TransactionType.ToLower() == "out" ? "var(--danger)" : "var(--warning)")">
+                                        @(transaction.QuantityChange > 0 ? $"+{transaction.QuantityChange}" : $"{transaction.QuantityChange}")
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Update products when category changes
+        $(function() {
+                if ($('#categorySelect').val()) {
+                    loadProducts($('#categorySelect').val());
+                }
+
+                // Handle category change
+                $('#categorySelect').change(function() {
+                    loadProducts($(this).val());
+                });
+
+                function loadProducts(CategoryId) {
+                    const productSelect = $('#productSelect');
+
+                    if (CategoryId) {
+                        $.getJSON('@Url.Action(action:"GetProductsByCategory", controller:"Transaction")', {
+                            CategoryId: CategoryId
+                        }, function(products) {
+                            productSelect.empty().append('<option value="">-- Select Product --</option>');
+
+                            $.each(products, function(index, product) {
+                                productSelect.append(new Option(product.text, product.value));
+                            });
+
+                            // Optional: Preselect product if editing existing transaction
+                            const selectedProduct = '@(Model.Transaction?.ProductId)';
+                            if (selectedProduct) {
+                                productSelect.val(selectedProduct);
+                            }
+                        });
+                    } else {
+                        productSelect.empty().append('<option value="">-- Select Product --</option>');
+                    }
+                }
+            });
+            // Handle transaction type change
+            $('#transactionTypeSelect').change(function() {
+                const transactionType = $(this).val();
+                const sourceGroup = $('#sourceWarehouseGroup');
+                const adjGroup = $('#adjustmentWarehouseGroup');
+                const adjToGroup = $('#adjustmentToWarehouseGroup');
+
+                if (transactionType === 'Adj') {
+                    sourceGroup.hide();
+                    adjGroup.show();
+                    adjToGroup.show();
+                } else {
+                    sourceGroup.show();
+                    adjGroup.hide();
+                    adjToGroup.hide();
+                }
+
+                // Update indicator styling
+                $(this).closest('.form-group').removeClass('transaction-in transaction-out transaction-adj');
+                $(this).closest('.form-group').addClass('transaction-' + transactionType.toLowerCase());
+            }).trigger('change');
+
+            // Update stock when product or warehouse changes
+            $('#productSelect, #warehouseSelect, #fromWarehouseSelect, #toWarehouseSelect').change(function() {
+                let warehouseId;
+                const transactionType = $('#transactionTypeSelect').val();
+                const productId = $('#productSelect').val();
+
+                if (transactionType === 'Adj') {
+                    // For adjustment, use the "From" warehouse
+                    warehouseId = $('#fromWarehouseSelect').val();
+                } else {
+                    warehouseId = $('#warehouseSelect').val();
+                }
+
+                if (productId && warehouseId) {
+                    $.getJSON('@Url.Action("GetStock", "Transaction")', {
+                        productId: productId,
+                        warehouseId: warehouseId
+                    }, function(stock) {
+                        animateStockValue(stock);
+                    });
+                } else {
+                    $('#stockDisplay').text('0');
+                }
+            });
+
+            // Animate stock value
+            function animateStockValue(newValue) {
+                const stockElement = $('#stockDisplay');
+                const currentValue = parseInt(stockElement.text().replace(',', '')) || 0;
+                const duration = 1000;
+                const startTime = Date.now();
+
+                function update() {
+                    const elapsed = Date.now() - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const easedProgress = 1 - Math.pow(1 - progress, 3);
+                    const value = Math.floor(currentValue + (newValue - currentValue) * easedProgress);
+
+                    stockElement.text(value.toLocaleString());
+
+                    if (progress < 1) {
+                        requestAnimationFrame(update);
+                    }
+                }
+
+                // Add animation class
+                stockElement.addClass('stock-change');
+                setTimeout(() => {
+                    stockElement.removeClass('stock-change');
+                }, 600);
+
+                update();
+            }
+        });
+    </script>
+</body>
