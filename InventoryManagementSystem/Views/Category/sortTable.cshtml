@@ -1,0 +1,52 @@
+@model PagedResult<InventoryManagementSystem.Models.Category>
+<table class="table align-items-center mb-0">
+    <thead>
+        <tr>
+            <th class="text-center">
+                <a class="sort" href="#" data-sortorder="@ViewData["IdSortParam"]">
+                    ID @(ViewBag.sortOrder == "id_desc" ? "?" : ViewBag.sortOrder == null ? "?" : "")
+                </a>
+            </th>
+            <th class="text-center">
+                <a class="sort" href="#" data-sortorder="@ViewData["NameSortParam"]">
+                    Name @(ViewBag.sortOrder == "name_desc" ? "?" : ViewBag.sortOrder == "name" ? "?" : "")
+                </a>
+            </th>
+            <th class="text-center">Description</th>
+            <th class="text-center">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Items.Count == 0)
+        {
+            <tr>
+                <td colspan="4" class="text-center text-danger fw-bold py-4">No Categories Found!</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td class="text-center">
+                        <p class="text-xs font-weight-bold mb-0">@item.CategoryId</p>
+                    </td>
+                    <td class="align-middle text-center">
+                        <span class="text-secondary text-xs font-weight-bold">@item.Name</span>
+                    </td>
+                    <td class="align-middle text-center">
+                        <span class="text-secondary text-xs font-weight-bold">@(item.Description ?? "N/A")</span>
+                    </td>
+                    <td class="align-middle text-center">
+                        <a class="btn btn-dark btn-sm me-1 UpSert-btn" data-id="@item.CategoryId">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </a>
+                        <button class="btn btn-danger btn-sm delete-btn" data-id="@item.CategoryId">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
