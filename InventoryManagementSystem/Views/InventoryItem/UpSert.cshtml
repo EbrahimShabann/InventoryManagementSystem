@@ -1,0 +1,48 @@
+@model InventoryManagementSystem.ViewModels.InventoryItemFormViewModel
+
+@{
+    ViewData["Title"] = Model.InventoryItem.InventoryItemId == 0 ? "Add Inventory Item" : "Edit Inventory Item";
+}
+
+<h2 class="mb-4">@ViewData["Title"]</h2>
+
+<form asp-action="UpSert" method="post">
+    <input type="hidden" asp-for="InventoryItem.InventoryItemId" />
+
+    <div class="mb-3">
+        <label asp-for="InventoryItem.ProductId" class="form-label fw-semibold">Product</label>
+        <select asp-for="InventoryItem.ProductId" class="form-select" asp-items="Model.Products">
+            <option value="">-- Select Product --</option>
+        </select>
+        <span asp-validation-for="InventoryItem.ProductId" class="text-danger small"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="InventoryItem.WareHouseId" class="form-label fw-semibold">Warehouse</label>
+        <select asp-for="InventoryItem.WareHouseId" class="form-select" asp-items="Model.WareHouses">
+            <option value="">-- Select Warehouse --</option>
+        </select>
+        <span asp-validation-for="InventoryItem.WareHouseId" class="text-danger small"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="InventoryItem.Quantity" class="form-label fw-semibold">Quantity</label>
+        <input asp-for="InventoryItem.Quantity" class="form-control" placeholder="Available quantity" />
+        <span asp-validation-for="InventoryItem.Quantity" class="text-danger small"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="InventoryItem.LastUpdated" class="form-label fw-semibold">Last Updated</label>
+        <input asp-for="InventoryItem.LastUpdated" class="form-control" type="datetime-local" />
+        <span asp-validation-for="InventoryItem.LastUpdated" class="text-danger small"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success px-4 mt-3">
+        @(Model.InventoryItem.InventoryItemId == 0 ? "Create" : "Update")
+    </button>
+    <a asp-action="Index" class="btn btn-secondary mt-3 ms-2">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

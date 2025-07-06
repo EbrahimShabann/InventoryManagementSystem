@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 namespace InventoryManagementSystem.Controllers
 {
-    [Authorize(Roles =StaticDetails.Admin_Role +","+StaticDetails.Manager_Role)]
+    [Authorize(Roles = StaticDetails.Admin_Role + "," + StaticDetails.Manager_Role)]
     public class WareHouseController : Controller
     {
         private readonly IUnitOfWork uof;
@@ -24,14 +24,11 @@ namespace InventoryManagementSystem.Controllers
 
         public IActionResult Index(int page = 1, int size = 10)
         {
-           
-            var wareHouses = uof.warehouseRepo.sort("",User); // Default sort by ID
+
+            var wareHouses = uof.warehouseRepo.sort("", User); // Default sort by ID
             var pagedResult = wareHouses.ToPagedResult(page, size);
             return View(pagedResult);
         }
-<<<<<<< Updated upstream
-
-=======
         public IActionResult search(string searchText, int page = 1, int size = 10)
         {
             var wareHouses = uof.warehouseRepo.sort("", User);
@@ -45,7 +42,6 @@ namespace InventoryManagementSystem.Controllers
             pagedResult = wareHouses.ToPagedResult(page, size);
             return PartialView("sortTable", pagedResult);
         }
->>>>>>> Stashed changes
         public IActionResult sortTable(string sortOrder, int page = 1, int size = 10)
         {
             ViewData["IdSortParam"] = String.IsNullOrEmpty(sortOrder) ? "id_desc" : "";
@@ -55,7 +51,7 @@ namespace InventoryManagementSystem.Controllers
             ViewData["productsSortParam"] = sortOrder == "products" ? "products_desc" : "products";
             ViewData["dateSortParam"] = sortOrder == "date" ? "date_desc" : "date";
 
-            var wareHouses = uof.warehouseRepo.sort(sortOrder,User).AsEnumerable();
+            var wareHouses = uof.warehouseRepo.sort(sortOrder, User).AsEnumerable();
             ViewBag.sortOrder = sortOrder;
             var pagedResult = wareHouses.ToPagedResult(page, size);
             return PartialView("sortTable", pagedResult);
@@ -77,11 +73,11 @@ namespace InventoryManagementSystem.Controllers
 
             foreach (var item in ware.InventoryItems)
             {
-                if (item?.Quantity== 0)
+                if (item?.Quantity == 0)
                 {
-                    TempData["error"]=($" Product: {item.Product.Name} stock is empty!");
+                    TempData["error"] = ($" Product: {item.Product.Name} stock is empty!");
                 }
-                else if (item?.Quantity<= 5)
+                else if (item?.Quantity <= 5)
                 {
                     TempData["warning"] = ($" Product: {item.Product.Name} is about to run out!");
                 }
@@ -102,7 +98,7 @@ namespace InventoryManagementSystem.Controllers
 
 
         [HttpGet]
-        [Authorize(Roles =StaticDetails.Admin_Role)]
+        [Authorize(Roles = StaticDetails.Admin_Role)]
         public IActionResult UpSert(int? id)
         {
             ViewBag.Managers = uof.AppUserRepo.GetAllManagers();
