@@ -14,18 +14,13 @@
 
     </div>
     <div class="card-body ">
-        <form id="upsertForm"
-              asp-controller="WareHouse"
-              asp-action="UpSert"
-              data-ajax="true"
-              data-ajax-method="post"
-              data-ajax-mode="replace"
-              data-ajax-update="#modalBody">
+        <form id="upsertForm" asp-controller="WareHouse" asp-action="UpSert" data-ajax="true" data-ajax-method="post"
+            data-ajax-mode="replace" data-ajax-update="#modalBody">
 
-            <input asp-for=@Model.WareHouseId hidden/>
+            <input asp-for=@Model.WareHouseId hidden />
 
             <div asp-validation-summary="All" class="text-danger"></div>
-           
+
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -44,7 +39,7 @@
             <div>
                 <label class="m-2">Manager </label>
                 <select class="form form-select" asp-for="ApplicationUserId" id="managers" asp-items="managers">
-                    <option value=""> --Select  Manager--</option>
+                    <option value=""> --Select Manager--</option>
                 </select>
                 <span asp-validation-for="ApplicationUserId" class="text-danger"></span>
 
@@ -60,8 +55,8 @@
                 <button type="button" class="btn btn-secondary form form-control" data-bs-dismiss="modal">Close</button>
 
             </div>
-      </form>
+        </form>
     </div>
 </div>
 
-<partial name="_ValidationScriptsPartial"/>
+<partial name="_ValidationScriptsPartial" />

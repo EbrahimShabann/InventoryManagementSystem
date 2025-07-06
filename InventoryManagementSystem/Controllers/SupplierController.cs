@@ -47,12 +47,10 @@ namespace InventoryManagementSystem.Controllers
                 {
                     if (supplier.SupplierId == 0)
                     {
-                        // add new supplier
                         uof.supplierRepo.Add(supplier);
                     }
                     else
                     {
-                        //update existed supplier
                         uof.supplierRepo.Update(supplier);
                     }
                     uof.Save();

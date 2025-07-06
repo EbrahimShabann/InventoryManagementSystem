@@ -9,7 +9,6 @@ namespace InventoryManagementSystem.Services.ModelsConfig
         public void Configure(EntityTypeBuilder<ApplicationUser> builder)
         {
             builder.Property(u => u.IsActive).HasDefaultValueSql("1");
-          
         }
     }
 }

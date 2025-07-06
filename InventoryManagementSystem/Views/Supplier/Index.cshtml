@@ -1,0 +1,101 @@
+@model PagedResult<Supplier>
+@{
+    ViewData["Title"] = "Suppliers";
+    var currentFilter = ViewData["CurrentFilter"] as string;
+    var page = ViewBag.CurrentPage ?? 1;
+    var size = ViewBag.PageSize ?? 10;
+    var totalPages = ViewBag.TotalPages ?? 1;
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Suppliers</h2>
+        <a class="btn btn-primary" asp-action="UpSert">+ Add Supplier</a>
+    </div>
+
+    <form method="get" asp-action="Index" class="mb-4">
+        <div class="input-group" style="max-width: 400px;">
+            <input type="text" name="searchString" value="@currentFilter" class="form-control"
+                placeholder="Search supplier..." />
+            <button type="submit" class="btn btn-outline-secondary">Search</button>
+        </div>
+    </form>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["IdSortParam"]"
+                        asp-route-searchString="@currentFilter">ID</a>
+                </th>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParam"]"
+                        asp-route-searchString="@currentFilter">Name</a>
+                </th>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["EmailSortParam"]"
+                        asp-route-searchString="@currentFilter">Email</a>
+                </th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Contact</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var supplier in Model.Items)
+            {
+                <tr>
+                    <td>@supplier.SupplierId</td>
+                    <td>@supplier.Name</td>
+                    <td>@supplier.Email</td>
+                    <td>@supplier.Phone</td>
+                    <td>@supplier.Address</td>
+                    <td>@supplier.ContactPerson</td>
+                    <td class="d-flex gap-1">
+                        <a class="btn btn-sm btn-warning" asp-action="UpSert" asp-route-id="@supplier.SupplierId">Edit</a>
+                        <a class="btn btn-sm btn-info" asp-action="Details"
+                            asp-route-SupplierId="@supplier.SupplierId">Details</a>
+                        <a href="javascript:void(0);" class="btn btn-sm btn-danger deleteSupplierBtn"
+                            data-id="@supplier.SupplierId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <partial name="~/Views/Shared/_PaginationControls.cshtml"
+        model="new { PageNumber = page, TotalPages = totalPages, PageSize = size }" />
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', '.deleteSupplierBtn', function (e) {
+                e.preventDefault();
+                let supplierId = $(this).data('id');
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "This supplier will be permanently deleted!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.post('@Url.Action("Delete", "Supplier")', {
+                            id: supplierId,
+                            __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                        }).done(() => {
+                            window.location.reload();
+                        }).fail(() => {
+                            alert("Failed to delete supplier.");
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

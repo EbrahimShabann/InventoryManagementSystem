@@ -11,6 +11,5 @@ namespace InventoryManagementSystem.Services.ModelsConfig
 
             builder.HasIndex(c => c.Name).IsUnique();
         }
-    
     }
 }
