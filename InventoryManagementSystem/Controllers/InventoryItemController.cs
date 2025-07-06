@@ -18,16 +18,32 @@ namespace InventoryManagementSystem.Controllers
             productRepo = repoProduct;
             this.uof = uof;
         }
-        public IActionResult Index(string sortOrder, int page = 1, int size = 10)
+        public IActionResult Index(string sortOrder, string searchString, int page = 1, int size = 10)
         {
-            ViewData["IdSortParam"] = String.IsNullOrEmpty(sortOrder) ? "id_desc" : "";
+            ViewData["IdSortParam"] = string.IsNullOrEmpty(sortOrder) ? "id_desc" : "";
             ViewData["WarehouseSortParam"] = sortOrder == "warehouse" ? "warehouse_desc" : "warehouse";
             ViewData["QuantitySortParam"] = sortOrder == "quantity" ? "quantity_desc" : "quantity";
+            ViewData["CurrentFilter"] = searchString;
 
-            var inventoryItems = uof.inventoryItemRepo.sort(sortOrder).AsEnumerable();
+            var inventoryItems = uof.inventoryItemRepo.sort(sortOrder).AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                inventoryItems = inventoryItems.Where(i =>
+                    i.Product.Name.Contains(searchString) ||
+                    i.WareHouse.Name.Contains(searchString)
+                );
+            }
+
             var pagedResult = inventoryItems.ToPagedResult(page, size);
+
+            ViewBag.CurrentPage = page;
+            ViewBag.PageSize = size;
+            ViewBag.TotalPages = pagedResult.TotalPages;
+
             return View(pagedResult);
         }
+
         public IActionResult UpSert(int? id)
         {
             var products = productRepo.GetAll()

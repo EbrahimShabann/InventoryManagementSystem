@@ -1,4 +1,4 @@
-@model PagedResult<Supplier>
+﻿@model PagedResult<Supplier>
 @{
     ViewData["Title"] = "Suppliers";
     var currentFilter = ViewData["CurrentFilter"] as string;
@@ -7,95 +7,158 @@
     var totalPages = ViewBag.TotalPages ?? 1;
 }
 
+<partial name="_UpSertModalPartial" />
+
+@if (User.IsInRole(StaticDetails.Admin_Role))
+{
+
+    @section asideNav {
+
+        <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link UpSert-btn" href="#" data-id="0">
+
+                        <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="ni ni-key-25 text-dark text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Add Supplier</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    }
+}
+
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Suppliers</h2>
-        <a class="btn btn-primary" asp-action="UpSert">+ Add Supplier</a>
     </div>
 
-    <form method="get" asp-action="Index" class="mb-4">
+    <form method="get" asp-action="Index" class="mb-3">
         <div class="input-group" style="max-width: 400px;">
-            <input type="text" name="searchString" value="@currentFilter" class="form-control"
-                placeholder="Search supplier..." />
+            <input type="text" name="searchString" value="@currentFilter" class="form-control form-control-sm"
+                   placeholder="Search supplier..." />
             <button type="submit" class="btn btn-outline-secondary">Search</button>
         </div>
     </form>
 
-    <table class="table table-bordered table-hover">
-        <thead class="table-dark">
-            <tr>
-                <th>
-                    <a asp-action="Index" asp-route-sortOrder="@ViewData["IdSortParam"]"
-                        asp-route-searchString="@currentFilter">ID</a>
-                </th>
-                <th>
-                    <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParam"]"
-                        asp-route-searchString="@currentFilter">Name</a>
-                </th>
-                <th>
-                    <a asp-action="Index" asp-route-sortOrder="@ViewData["EmailSortParam"]"
-                        asp-route-searchString="@currentFilter">Email</a>
-                </th>
-                <th>Phone</th>
-                <th>Address</th>
-                <th>Contact</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var supplier in Model.Items)
-            {
-                <tr>
-                    <td>@supplier.SupplierId</td>
-                    <td>@supplier.Name</td>
-                    <td>@supplier.Email</td>
-                    <td>@supplier.Phone</td>
-                    <td>@supplier.Address</td>
-                    <td>@supplier.ContactPerson</td>
-                    <td class="d-flex gap-1">
-                        <a class="btn btn-sm btn-warning" asp-action="UpSert" asp-route-id="@supplier.SupplierId">Edit</a>
-                        <a class="btn btn-sm btn-info" asp-action="Details"
-                            asp-route-SupplierId="@supplier.SupplierId">Details</a>
-                        <a href="javascript:void(0);" class="btn btn-sm btn-danger deleteSupplierBtn"
-                            data-id="@supplier.SupplierId">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header pb-0 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Categories</h5>
+                </div>
+                <div class="card-body px-0 pt-0 pb-2">
+                    <div id="injectTable" class="table-responsive p-0">
+                        <table class="table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <a asp-action="Index" asp-route-sortOrder="@ViewData["IdSortParam"]"
+                                           asp-route-searchString="@currentFilter">ID</a>
+                                    </th>
+                                    <th>
+                                        <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParam"]"
+                                           asp-route-searchString="@currentFilter">Name</a>
+                                    </th>
+                                    <th>
+                                        <a asp-action="Index" asp-route-sortOrder="@ViewData["EmailSortParam"]"
+                                           asp-route-searchString="@currentFilter">Email</a>
+                                    </th>
+                                    <th>Phone</th>
+                                    <th>Address</th>
+                                    <th>Contact</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Items.Count == 0)
+                                {
+                                    <tr>
+                                        <td colspan="7" class="text-center text-danger fw-bold py-4">
+                                            No Suppliers Found!
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    @foreach (var supplier in Model.Items)
+                                    {
+                                        <tr>
+                                            <td class="text-center">@supplier.SupplierId</td>
+                                            <td class="text-center">@supplier.Name</td>
+                                            <td class="text-center">@supplier.Email</td>
+                                            <td class="text-center">@supplier.Phone</td>
+                                            <td class="text-center">@supplier.Address</td>
+                                            <td class="text-center">@supplier.ContactPerson</td>
+                                            <td class="text-center">
+                                                <a class="btn btn-info btn-sm me-1" asp-action="Details"
+                                                   asp-route-SupplierId="@supplier.SupplierId">
+                                                    <i class="fa-solid fa-eye"></i>
+                                                </a>
+                                                @if (User.IsInRole(StaticDetails.Admin_Role))
+                                                {
+                                                    <a class="btn btn-dark btn-sm me-1 UpSert-btn" data-id="@supplier.SupplierId">
+                                                        <i class="fa-solid fa-pen-to-square"></i>
+                                                    </a>
+                                                    <a href="javascript:void(0);" class="btn btn-sm btn-danger deleteSupplierBtn"
+                                                       data-id="@supplier.SupplierId">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <partial name="~/Views/Shared/_PaginationControls.cshtml"
-        model="new { PageNumber = page, TotalPages = totalPages, PageSize = size }" />
 </div>
 
 @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        $(document).ready(function () {
-            $(document).on('click', '.deleteSupplierBtn', function (e) {
-                e.preventDefault();
-                let supplierId = $(this).data('id');
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "This supplier will be permanently deleted!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.post('@Url.Action("Delete", "Supplier")', {
-                            id: supplierId,
-                            __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
-                        }).done(() => {
-                            window.location.reload();
-                        }).fail(() => {
-                            alert("Failed to delete supplier.");
+                document.querySelectorAll('.deleteSupplierBtn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+
+                        const Id = btn.getAttribute("data-id");
+                        Swal.fire({
+                            title: "Are you sure?",
+                            text: "You won't be able to revert this!",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Yes, delete it!"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = `/Supplier/Delete/${Id}`;
+                                Swal.fire({
+                                    title: "Deleted!",
+                                    text: "Supplier has been deleted.",
+                                    icon: "success"
+
+                                });
+                            }
                         });
-                    }
+                    });
                 });
-            });
-        });
+
+        $(".UpSert-btn").click(function () {
+                const id = $(this).data('id');
+                $("#modalBody").load(`/Supplier/UpSert/${id}`, function () {
+                    new bootstrap.Modal('#upsertModal').show();
+                })
+            })
     </script>
 }
+
+<partial name="_PaginationControls" />
