@@ -100,7 +100,9 @@
                 </div>
                 <div class="text-end">
                     <div class="text-success small">Address</div>
-                    <div class="fw-bold text-danger">@item.Address.Substring(0,10)</div>
+                    <div class="fw-bold text-danger">
+                        @(string.IsNullOrEmpty(item.Address) ? "" : item.Address.Length > 10 ? item.Address.Substring(0, 10) : item.Address)
+                    </div>
                 </div>
             </div>
 
